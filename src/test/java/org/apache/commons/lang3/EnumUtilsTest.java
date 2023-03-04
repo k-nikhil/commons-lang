@@ -43,7 +43,7 @@ enum Enum64 {
 /**
  *
  */
-public class EnumUtilsTest {
+public class EnumUtilsTest extends AbstractLangTest {
 
     private void assertArrayEquals(final long[] actual, final long... expected) {
         Assertions.assertArrayEquals(expected, actual);
@@ -580,7 +580,7 @@ enum Month {
 
     private final int id;
 
-    Month(int id) {
+    Month(final int id) {
         this.id = id;
     }
 

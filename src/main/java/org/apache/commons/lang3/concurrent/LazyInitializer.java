@@ -17,10 +17,9 @@
 package org.apache.commons.lang3.concurrent;
 
 /**
- * <p>
  * This class provides a generic implementation of the lazy initialization
  * pattern.
- * </p>
+ *
  * <p>
  * Sometimes an application has to deal with an object only under certain
  * circumstances, e.g. when the user selects a specific menu item or if a
@@ -39,7 +38,7 @@ package org.apache.commons.lang3.concurrent;
  * <p>
  * As an usage example consider that we have a class {@code ComplexObject} whose
  * instantiation is a complex operation. In order to apply lazy initialization
- * to this class, a subclass of {@code LazyInitializer} has to be created:
+ * to this class, a subclass of {@link LazyInitializer} has to be created:
  * </p>
  *
  * <pre>
@@ -89,7 +88,7 @@ public abstract class LazyInitializer<T> implements ConcurrentInitializer<T> {
      * Returns the object wrapped by this instance. On first access the object
      * is created. After that it is cached and can be accessed pretty fast.
      *
-     * @return the object initialized by this {@code LazyInitializer}
+     * @return the object initialized by this {@link LazyInitializer}
      * @throws ConcurrentException if an error occurred during initialization of
      * the object
      */

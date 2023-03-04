@@ -61,7 +61,7 @@ final class MemberUtils {
             try {
                 obj.setAccessible(true);
                 return obj;
-            } catch (final SecurityException e) { // NOPMD
+            } catch (final SecurityException ignored) {
                 // ignore in favor of subsequent IllegalAccessException
             }
         }
@@ -101,7 +101,7 @@ final class MemberUtils {
      * @return {@code true} if {@code m} is accessible
      */
     static boolean isAccessible(final Member member) {
-        return member != null && isPublic(member) && !member.isSynthetic();
+        return isPublic(member) && !member.isSynthetic();
     }
 
     /**
@@ -203,7 +203,7 @@ final class MemberUtils {
     }
 
     /**
-     * Gets the number of steps required needed to turn the source class into
+     * Gets the number of steps needed to turn the source class into
      * the destination class. This represents the number of steps in the object
      * hierarchy graph.
      * @param srcClass The source class
@@ -301,8 +301,8 @@ final class MemberUtils {
     }
 
     /**
-     * <p> A class providing a subset of the API of java.lang.reflect.Executable in Java 1.8,
-     * providing a common representation for function signatures for Constructors and Methods.</p>
+     *  A class providing a subset of the API of java.lang.reflect.Executable in Java 1.8,
+     * providing a common representation for function signatures for Constructors and Methods.
      */
     private static final class Executable {
       private final Class<?>[] parameterTypes;

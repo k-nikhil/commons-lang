@@ -35,6 +35,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.CharBuffer;
 
+import org.apache.commons.lang3.AbstractLangTest;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.Test;
 
@@ -42,7 +43,7 @@ import org.junit.jupiter.api.Test;
  * Unit tests for {@link org.apache.commons.lang3.text.StrBuilder}.
  */
 @Deprecated
-public class StrBuilderTest {
+public class StrBuilderTest extends AbstractLangTest {
 
     @Test
     public void testConstructors() {
@@ -1599,59 +1600,61 @@ public class StrBuilderTest {
         reader.close();
         assertTrue(reader.ready());
 
-        final Reader r = sb.asReader();
-        final char[] arr = new char[3];
-        assertThrows(IndexOutOfBoundsException.class, () -> r.read(arr, -1, 0));
-        assertThrows(IndexOutOfBoundsException.class, () -> r.read(arr, 0, -1));
-        assertThrows(IndexOutOfBoundsException.class, () -> r.read(arr, 100, 1));
-        assertThrows(IndexOutOfBoundsException.class, () -> r.read(arr, 0, 100));
-        assertThrows(IndexOutOfBoundsException.class, () -> r.read(arr, Integer.MAX_VALUE, Integer.MAX_VALUE));
+        try (Reader r = sb.asReader()) {
+            final char[] arr = new char[3];
+            assertThrows(IndexOutOfBoundsException.class, () -> r.read(arr, -1, 0));
+            assertThrows(IndexOutOfBoundsException.class, () -> r.read(arr, 0, -1));
+            assertThrows(IndexOutOfBoundsException.class, () -> r.read(arr, 100, 1));
+            assertThrows(IndexOutOfBoundsException.class, () -> r.read(arr, 0, 100));
+            assertThrows(IndexOutOfBoundsException.class, () -> r.read(arr, Integer.MAX_VALUE, Integer.MAX_VALUE));
 
-        assertEquals(0, r.read(arr, 0, 0));
-        assertEquals(0, arr[0]);
-        assertEquals(0, arr[1]);
-        assertEquals(0, arr[2]);
+            assertEquals(0, r.read(arr, 0, 0));
+            assertEquals(0, arr[0]);
+            assertEquals(0, arr[1]);
+            assertEquals(0, arr[2]);
 
-        r.skip(9);
-        assertEquals(-1, r.read(arr, 0, 1));
+            r.skip(9);
+            assertEquals(-1, r.read(arr, 0, 1));
 
-        r.reset();
-        array = new char[30];
-        assertEquals(9, r.read(array, 0, 30));
+            r.reset();
+            array = new char[30];
+            assertEquals(9, r.read(array, 0, 30));
+        }
     }
 
     @Test
     public void testAsWriter() throws Exception {
         final StrBuilder sb = new StrBuilder("base");
-        final Writer writer = sb.asWriter();
+        try (Writer writer = sb.asWriter()) {
 
-        writer.write('l');
-        assertEquals("basel", sb.toString());
+            writer.write('l');
+            assertEquals("basel", sb.toString());
 
-        writer.write(new char[] {'i', 'n'});
-        assertEquals("baselin", sb.toString());
+            writer.write(new char[] { 'i', 'n' });
+            assertEquals("baselin", sb.toString());
 
-        writer.write(new char[] {'n', 'e', 'r'}, 1, 2);
-        assertEquals("baseliner", sb.toString());
+            writer.write(new char[] { 'n', 'e', 'r' }, 1, 2);
+            assertEquals("baseliner", sb.toString());
 
-        writer.write(" rout");
-        assertEquals("baseliner rout", sb.toString());
+            writer.write(" rout");
+            assertEquals("baseliner rout", sb.toString());
 
-        writer.write("ping that server", 1, 3);
-        assertEquals("baseliner routing", sb.toString());
+            writer.write("ping that server", 1, 3);
+            assertEquals("baseliner routing", sb.toString());
 
-        writer.flush();  // no effect
-        assertEquals("baseliner routing", sb.toString());
+            writer.flush(); // no effect
+            assertEquals("baseliner routing", sb.toString());
 
-        writer.close();  // no effect
-        assertEquals("baseliner routing", sb.toString());
+            writer.close(); // no effect
+            assertEquals("baseliner routing", sb.toString());
 
-        writer.write(" hi");  // works after close
-        assertEquals("baseliner routing hi", sb.toString());
+            writer.write(" hi"); // works after close
+            assertEquals("baseliner routing hi", sb.toString());
 
-        sb.setLength(4);  // mix and match
-        writer.write('d');
-        assertEquals("based", sb.toString());
+            sb.setLength(4); // mix and match
+            writer.write('d');
+            assertEquals("based", sb.toString());
+        }
     }
 
     @Test

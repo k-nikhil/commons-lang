@@ -19,19 +19,19 @@ package org.apache.commons.lang3.text;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.lang3.AbstractLangTest;
 import org.junit.jupiter.api.Test;
 
 /**
  * Test class for StrLookup.
  */
 @Deprecated
-public class StrLookupTest  {
+public class StrLookupTest extends AbstractLangTest {
 
     @Test
     public void testNoneLookup() {
@@ -45,7 +45,7 @@ public class StrLookupTest  {
         assertEquals(System.getProperty("os.name"), StrLookup.systemPropertiesLookup().lookup("os.name"));
         assertNull(StrLookup.systemPropertiesLookup().lookup(""));
         assertNull(StrLookup.systemPropertiesLookup().lookup("other"));
-        assertThrows(NullPointerException.class, () -> StrLookup.systemPropertiesLookup().lookup(null));
+        assertNull(StrLookup.systemPropertiesLookup().lookup(null));
     }
 
     /**

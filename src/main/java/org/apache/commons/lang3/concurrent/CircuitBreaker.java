@@ -17,10 +17,9 @@
 package org.apache.commons.lang3.concurrent;
 
 /**
- * <p>
  * An interface describing a <a
- * href="http://martinfowler.com/bliki/CircuitBreaker.html">Circuit Breaker</a> component.
- * </p>
+ * href="https://martinfowler.com/bliki/CircuitBreaker.html">Circuit Breaker</a> component.
+ *
  * <p>
  * A <em>circuit breaker</em> can be used to protect an application against unreliable
  * services or unexpected load. It typically monitors a specific resource. As long as this
@@ -60,7 +59,7 @@ public interface CircuitBreaker<T> {
 
     /**
      * Checks the state of this circuit breaker and changes it if necessary. The return
-     * value indicates whether the circuit breaker is now in state {@code CLOSED}; a value
+     * value indicates whether the circuit breaker is now in state <em>closed</em>; a value
      * of <strong>true</strong> typically means that the current operation can continue.
      *
      * @return <strong>true</strong> if the circuit breaker is now closed;

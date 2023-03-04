@@ -21,7 +21,6 @@ import java.text.MessageFormat;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -33,7 +32,7 @@ import org.apache.commons.lang3.Validate;
 /**
  * Extends {@code java.text.MessageFormat} to allow pluggable/additional formatting
  * options for embedded format elements.  Client code should specify a registry
- * of {@code FormatFactory} instances associated with {@code String}
+ * of {@link FormatFactory} instances associated with {@link String}
  * format names.  This registry will be consulted when the format elements are
  * parsed from the message pattern.  In this way custom patterns can be specified,
  * and the formats supported by {@code java.text.MessageFormat} can be overridden
@@ -45,24 +44,24 @@ import org.apache.commons.lang3.Validate;
  * <p>
  * <i>format-name</i> and <i>format-style</i> values are trimmed of surrounding whitespace
  * in the manner of {@code java.text.MessageFormat}.  If <i>format-name</i> denotes
- * {@code FormatFactory formatFactoryInstance} in {@code registry}, a {@code Format}
+ * {@code FormatFactory formatFactoryInstance} in {@code registry}, a {@link Format}
  * matching <i>format-name</i> and <i>format-style</i> is requested from
- * {@code formatFactoryInstance}.  If this is successful, the {@code Format}
+ * {@code formatFactoryInstance}.  If this is successful, the {@link Format}
  * found is used for this format element.
  * </p>
  *
  * <p><b>NOTICE:</b> The various subformat mutator methods are considered unnecessary; they exist on the parent
  * class to allow the type of customization which it is the job of this class to provide in
  * a configurable fashion.  These methods have thus been disabled and will throw
- * {@code UnsupportedOperationException} if called.
+ * {@link UnsupportedOperationException} if called.
  * </p>
  *
  * <p>Limitations inherited from {@code java.text.MessageFormat}:</p>
  * <ul>
  * <li>When using "choice" subformats, support for nested formatting instructions is limited
  *     to that provided by the base class.</li>
- * <li>Thread-safety of {@code Format}s, including {@code MessageFormat} and thus
- *     {@code ExtendedMessageFormat}, is not guaranteed.</li>
+ * <li>Thread-safety of {@link Format}s, including {@link MessageFormat} and thus
+ *     {@link ExtendedMessageFormat}, is not guaranteed.</li>
  * </ul>
  *
  * @since 2.4
@@ -208,11 +207,11 @@ public class ExtendedMessageFormat extends MessageFormat {
             // only loop over what we know we have, as MessageFormat on Java 1.3
             // seems to provide an extra format element:
             int i = 0;
-            for (final Iterator<Format> it = foundFormats.iterator(); it.hasNext(); i++) {
-                final Format f = it.next();
+            for (final Format f : foundFormats) {
                 if (f != null) {
                     origFormats[i] = f;
                 }
+                i++;
             }
             super.setFormats(origFormats);
         }
@@ -350,7 +349,7 @@ public class ExtendedMessageFormat extends MessageFormat {
             if ((c == START_FMT || c == END_FE) && result.length() > 0) {
                 try {
                     return Integer.parseInt(result.toString());
-                } catch (final NumberFormatException e) { // NOPMD
+                } catch (final NumberFormatException ignored) {
                     // we've already ensured only digits, so unless something
                     // outlandishly large was specified we should be okay.
                 }
@@ -524,11 +523,6 @@ public class ExtendedMessageFormat extends MessageFormat {
         if (coll == null || coll.isEmpty()) {
             return false;
         }
-        for (final Object name : coll) {
-            if (name != null) {
-                return true;
-            }
-        }
-        return false;
+        return coll.stream().anyMatch(Objects::nonNull);
     }
 }

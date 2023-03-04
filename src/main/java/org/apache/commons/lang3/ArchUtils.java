@@ -111,7 +111,7 @@ public class ArchUtils {
     }
 
     /**
-     * Returns a {@link Processor} object of the current JVM.
+     * Gets a {@link Processor} object of the current JVM.
      *
      * <p>
      * Important: The os.arch System Property returns the architecture used by the JVM
@@ -121,11 +121,11 @@ public class ArchUtils {
      * @return A {@link Processor} when supported, else {@code null}.
      */
     public static Processor getProcessor() {
-        return getProcessor(SystemUtils.OS_ARCH);
+        return getProcessor(SystemProperties.getOsArch());
     }
 
     /**
-     * Returns a {@link Processor} object the given value {@link String}. The {@link String} must be
+     * Gets a {@link Processor} object the given value {@link String}. The {@link String} must be
      * like a value returned by the {@code os.arch} System Property.
      *
      * @param value A {@link String} like a value returned by the {@code os.arch} System Property.

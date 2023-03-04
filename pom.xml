@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>53</version>
+    <version>56</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>commons-lang3</artifactId>
@@ -522,18 +522,6 @@
     </contributor>
   </contributors>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.junit</groupId>
-        <artifactId>junit-bom</artifactId>
-        <version>5.8.2</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <!-- Lang should depend on very little -->
   <dependencies>
     <!-- testing -->
@@ -545,7 +533,7 @@
     <dependency>
       <groupId>org.junit-pioneer</groupId>
       <artifactId>junit-pioneer</artifactId>
-      <version>1.7.1</version>
+      <version>1.9.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -558,7 +546,7 @@
     <dependency>
       <groupId>org.easymock</groupId>
       <artifactId>easymock</artifactId>
-      <version>4.3</version>
+      <version>5.1.0</version>
       <scope>test</scope>
     </dependency>
 
@@ -566,7 +554,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-text</artifactId>
-      <version>1.9</version>
+      <version>1.10.0</version>
       <scope>provided</scope>
     </dependency>
 
@@ -634,29 +622,14 @@
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
     <commons.encoding>utf-8</commons.encoding>
 
-    <checkstyle.plugin.version>3.1.2</checkstyle.plugin.version>
-    <checkstyle.version>9.3</checkstyle.version>
     <checkstyle.configdir>src/site/resources/checkstyle</checkstyle.configdir>
 
-    <commons.spotbugs.plugin.version>4.7.0.0</commons.spotbugs.plugin.version>
-    <commons.spotbugs.impl.version>4.6.0</commons.spotbugs.impl.version>
     <japicmp.skip>false</japicmp.skip>
-    <clirr.skip>true</clirr.skip>
 
     <!-- JMH Benchmark related properties, version, target compiler and name of the benchmarking uber jar. -->
-    <jmh.version>1.35</jmh.version>
+    <jmh.version>1.36</jmh.version>
     <uberjar.name>benchmarks</uberjar.name>
 
-    <commons.jacoco.version>0.8.8</commons.jacoco.version>
-    <commons.surefire.version>3.0.0-M7</commons.surefire.version>
-    <commons.javadoc.version>3.4.0</commons.javadoc.version>
-    <commons.japicmp.version>0.15.7</commons.japicmp.version>
-    <commons.pmd.version>3.17.0</commons.pmd.version>
-    <commons.pmd-impl.version>6.46.0</commons.pmd-impl.version>
-    <commons.felix.version>5.1.2</commons.felix.version>
-    <biz.aQute.bndlib.version>6.2.0</biz.aQute.bndlib.version>
-    <commons.animal-sniffer.version>1.21</commons.animal-sniffer.version>
-    
     <!-- Commons Release Plugin -->
     <commons.bc.version>3.12.0</commons.bc.version>
     <commons.rc.version>RC1</commons.rc.version>
@@ -667,37 +640,16 @@
   </properties>
 
   <build>
-   <defaultGoal>clean verify apache-rat:check checkstyle:check japicmp:cmp spotbugs:check javadoc:javadoc</defaultGoal>
+   <defaultGoal>clean verify apache-rat:check checkstyle:check japicmp:cmp spotbugs:check pmd:check javadoc:javadoc</defaultGoal>
    <pluginManagement>
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-pmd-plugin</artifactId>
           <version>${commons.pmd.version}</version>
-          <dependencies>
-            <dependency>
-              <groupId>net.sourceforge.pmd</groupId>
-              <artifactId>pmd-core</artifactId>
-              <version>${commons.pmd-impl.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>net.sourceforge.pmd</groupId>
-              <artifactId>pmd-java</artifactId>
-              <version>${commons.pmd-impl.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>net.sourceforge.pmd</groupId>
-              <artifactId>pmd-javascript</artifactId>
-              <version>${commons.pmd-impl.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>net.sourceforge.pmd</groupId>
-              <artifactId>pmd-jsp</artifactId>
-              <version>${commons.pmd-impl.version}</version>
-            </dependency>
-          </dependencies>
           <configuration>
             <targetJdk>${maven.compiler.target}</targetJdk>
+            <excludeFromFailureFile>src/conf/exclude-pmd.properties</excludeFromFailureFile>
           </configuration>
         </plugin>
         <plugin>
@@ -750,7 +702,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>${commons.surefire.version}</version>
         <executions>
           <execution>
             <id>plain</id>
@@ -805,31 +756,15 @@
       </plugin>
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${checkstyle.plugin.version}</version>
         <configuration>
           <configLocation>${checkstyle.configdir}/checkstyle.xml</configLocation>
           <includeTestSourceDirectory>true</includeTestSourceDirectory>
           <enableRulesSummary>false</enableRulesSummary>
         </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>com.puppycrawl.tools</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>${checkstyle.version}</version>
-          </dependency>
-        </dependencies>
       </plugin>
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${commons.spotbugs.plugin.version}</version>
-        <dependencies>
-          <dependency>
-            <groupId>com.github.spotbugs</groupId>
-            <artifactId>spotbugs</artifactId>
-            <version>${commons.spotbugs.impl.version}</version>
-         </dependency>
-        </dependencies>        
         <configuration>
           <excludeFilterFile>${basedir}/src/conf/spotbugs-exclude-filter.xml</excludeFilterFile>
         </configuration>
@@ -862,7 +797,6 @@
       </plugin>
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${checkstyle.plugin.version}</version>
         <configuration>
           <configLocation>${checkstyle.configdir}/checkstyle.xml</configLocation>
           <includeTestSourceDirectory>true</includeTestSourceDirectory>
@@ -880,7 +814,6 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${commons.spotbugs.plugin.version}</version>
         <configuration>
           <excludeFilterFile>${basedir}/src/conf/spotbugs-exclude-filter.xml</excludeFilterFile>
         </configuration>
@@ -1037,7 +970,7 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
-            <version>3.0.0</version>
+            <version>3.1.0</version>
             <executions>
               <execution>
                 <id>benchmark</id>

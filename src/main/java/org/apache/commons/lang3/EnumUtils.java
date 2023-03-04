@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * <p>Utility library to provide helper methods for Java enums.</p>
+ * Utility library to provide helper methods for Java enums.
  *
  * <p>#ThreadSafe#</p>
  *
@@ -51,7 +51,7 @@ public class EnumUtils {
      * @since 3.2
      */
     private static <E extends Enum<E>> Class<E> asEnum(final Class<E> enumClass) {
-        Validate.notNull(enumClass, ENUM_CLASS_MUST_BE_DEFINED);
+        Objects.requireNonNull(enumClass, ENUM_CLASS_MUST_BE_DEFINED);
         Validate.isTrue(enumClass.isEnum(), S_DOES_NOT_SEEM_TO_BE_AN_ENUM_TYPE, enumClass);
         return enumClass;
     }
@@ -74,7 +74,7 @@ public class EnumUtils {
     }
 
     /**
-     * <p>Creates a long bit vector representation of the given array of Enum values.</p>
+     * Creates a long bit vector representation of the given array of Enum values.
      *
      * <p>This generates a value that is usable by {@link EnumUtils#processBitVector}.</p>
      *
@@ -97,7 +97,7 @@ public class EnumUtils {
     }
 
     /**
-     * <p>Creates a long bit vector representation of the given subset of an Enum.</p>
+     * Creates a long bit vector representation of the given subset of an Enum.
      *
      * <p>This generates a value that is usable by {@link EnumUtils#processBitVector}.</p>
      *
@@ -119,14 +119,14 @@ public class EnumUtils {
         Objects.requireNonNull(values, "values");
         long total = 0;
         for (final E constant : values) {
-            Validate.notNull(constant, NULL_ELEMENTS_NOT_PERMITTED);
+            Objects.requireNonNull(constant, NULL_ELEMENTS_NOT_PERMITTED);
             total |= 1L << constant.ordinal();
         }
         return total;
     }
 
     /**
-     * <p>Creates a bit vector representation of the given subset of an Enum using as many {@code long}s as needed.</p>
+     * Creates a bit vector representation of the given subset of an Enum using as many {@code long}s as needed.
      *
      * <p>This generates a value that is usable by {@link EnumUtils#processBitVectors}.</p>
      *
@@ -136,7 +136,7 @@ public class EnumUtils {
      * @param values    the values we want to convert, not {@code null}, neither containing {@code null}
      * @param <E>       the type of the enumeration
      * @return a long[] whose values provide a binary representation of the given set of enum values
-     *         with least significant digits rightmost.
+     *         with the least significant digits rightmost.
      * @throws NullPointerException if {@code enumClass} or {@code values} is {@code null}
      * @throws IllegalArgumentException if {@code enumClass} is not an enum class, or if any {@code values} {@code null}
      * @since 3.2
@@ -156,7 +156,7 @@ public class EnumUtils {
     }
 
     /**
-     * <p>Creates a bit vector representation of the given subset of an Enum using as many {@code long}s as needed.</p>
+     * Creates a bit vector representation of the given subset of an Enum using as many {@code long}s as needed.
      *
      * <p>This generates a value that is usable by {@link EnumUtils#processBitVectors}.</p>
      *
@@ -166,7 +166,7 @@ public class EnumUtils {
      * @param values    the values we want to convert, not {@code null}, neither containing {@code null}
      * @param <E>       the type of the enumeration
      * @return a long[] whose values provide a binary representation of the given set of enum values
-     *         with least significant digits rightmost.
+     *         with the least significant digits rightmost.
      * @throws NullPointerException if {@code enumClass} or {@code values} is {@code null}
      * @throws IllegalArgumentException if {@code enumClass} is not an enum class, or if any {@code values} {@code null}
      * @since 3.2
@@ -175,10 +175,7 @@ public class EnumUtils {
         asEnum(enumClass);
         Objects.requireNonNull(values, "values");
         final EnumSet<E> condensed = EnumSet.noneOf(enumClass);
-        for (final E constant : values) {
-            Validate.notNull(constant, NULL_ELEMENTS_NOT_PERMITTED);
-            condensed.add(constant);
-        }
+        values.forEach(constant -> condensed.add(Objects.requireNonNull(constant, NULL_ELEMENTS_NOT_PERMITTED)));
         final long[] result = new long[(enumClass.getEnumConstants().length - 1) / Long.SIZE + 1];
         for (final E value : condensed) {
             result[value.ordinal() / Long.SIZE] |= 1L << (value.ordinal() % Long.SIZE);
@@ -188,7 +185,7 @@ public class EnumUtils {
     }
 
     /**
-     * <p>Gets the enum for the class, returning {@code null} if not found.</p>
+     * Gets the enum for the class, returning {@code null} if not found.
      *
      * <p>This method differs from {@link Enum#valueOf} in that it does not throw an exception
      * for an invalid enum name.</p>
@@ -203,7 +200,7 @@ public class EnumUtils {
     }
 
     /**
-     * <p>Gets the enum for the class, returning {@code defaultEnum} if not found.</p>
+     * Gets the enum for the class, returning {@code defaultEnum} if not found.
      *
      * <p>This method differs from {@link Enum#valueOf} in that it does not throw an exception
      * for an invalid enum name.</p>
@@ -227,7 +224,7 @@ public class EnumUtils {
     }
 
     /**
-     * <p>Gets the enum for the class, returning {@code null} if not found.</p>
+     * Gets the enum for the class, returning {@code null} if not found.
      *
      * <p>This method differs from {@link Enum#valueOf} in that it does not throw an exception
      * for an invalid enum name and performs case insensitive matching of the name.</p>
@@ -243,7 +240,7 @@ public class EnumUtils {
     }
 
     /**
-     * <p>Gets the enum for the class, returning {@code defaultEnum} if not found.</p>
+     * Gets the enum for the class, returning {@code defaultEnum} if not found.
      *
      * <p>This method differs from {@link Enum#valueOf} in that it does not throw an exception
      * for an invalid enum name and performs case insensitive matching of the name.</p>
@@ -261,7 +258,7 @@ public class EnumUtils {
     }
 
     /**
-     * <p>Gets the {@code List} of enums.</p>
+     * Gets the {@link List} of enums.
      *
      * <p>This method is useful when you need a list of enums rather than an array.</p>
      *
@@ -274,7 +271,7 @@ public class EnumUtils {
     }
 
     /**
-     * <p>Gets the {@code Map} of enums by name.</p>
+     * Gets the {@link Map} of enums by name.
      *
      * <p>This method is useful when you need a map of enums by name.</p>
      *
@@ -287,9 +284,7 @@ public class EnumUtils {
     }
 
     /**
-     * <p>
-     * Gets the {@code Map} of enums by name.
-     * </p>
+     * Gets the {@link Map} of enums by name.
      *
      * <p>
      * This method is useful when you need a map of enums by name.
@@ -307,9 +302,7 @@ public class EnumUtils {
     }
 
     /**
-     * <p>
      * Gets the enum for the class in a system property, returning {@code defaultEnum} if not found.
-     * </p>
      *
      * <p>
      * This method differs from {@link Enum#valueOf} in that it does not throw an exception for an invalid enum name.
@@ -329,7 +322,7 @@ public class EnumUtils {
     }
 
     /**
-     * <p>Gets the enum for the class, returning {@code defaultEnum} if not found.</p>
+     * Gets the enum for the class, returning {@code defaultEnum} if not found.
      *
      * <p>This method differs from {@link Enum#valueOf} in that it does not throw an exception
      * for an invalid enum name and performs case insensitive matching of the name.</p>
@@ -342,23 +335,18 @@ public class EnumUtils {
      * @return the enum, default enum if not found
      * @since 3.13.0
      */
-    public static <E extends Enum<E>> E getFirstEnumIgnoreCase(final Class<E> enumClass, final String enumName,
-        final Function<E, String> stringFunction, final E defaultEnum) {
+    public static <E extends Enum<E>> E getFirstEnumIgnoreCase(final Class<E> enumClass, final String enumName, final Function<E, String> stringFunction,
+        final E defaultEnum) {
         if (enumName == null || !enumClass.isEnum()) {
             return defaultEnum;
         }
-        for (final E each : enumClass.getEnumConstants()) {
-            if (enumName.equalsIgnoreCase(stringFunction.apply(each))) {
-                return each;
-            }
-        }
-        return defaultEnum;
+        return Stream.of(enumClass.getEnumConstants()).filter(e -> enumName.equalsIgnoreCase(stringFunction.apply(e))).findFirst().orElse(defaultEnum);
     }
 
     /**
-     * <p>Checks if the specified name is a valid enum for the class.</p>
+     * Checks if the specified name is a valid enum for the class.
      *
-     * <p>This method differs from {@link Enum#valueOf} in that checks if the name is
+     * <p>This method differs from {@link Enum#valueOf} in that it checks if the name is
      * a valid enum without needing to catch the exception.</p>
      *
      * @param <E> the type of the enumeration
@@ -371,9 +359,9 @@ public class EnumUtils {
     }
 
     /**
-     * <p>Checks if the specified name is a valid enum for the class.</p>
+     * Checks if the specified name is a valid enum for the class.
      *
-     * <p>This method differs from {@link Enum#valueOf} in that checks if the name is
+     * <p>This method differs from {@link Enum#valueOf} in that it checks if the name is
      * a valid enum without needing to catch the exception
      * and performs case insensitive matching of the name.</p>
      *
@@ -388,8 +376,8 @@ public class EnumUtils {
     }
 
     /**
-     * <p>Convert a long value created by {@link EnumUtils#generateBitVector} into the set of
-     * enum values that it represents.</p>
+     * Convert a long value created by {@link EnumUtils#generateBitVector} into the set of
+     * enum values that it represents.
      *
      * <p>If you store this value, beware any changes to the enum that would affect ordinal values.</p>
      * @param enumClass the class of the enum we are working with, not {@code null}
@@ -406,12 +394,12 @@ public class EnumUtils {
     }
 
     /**
-     * <p>Convert a {@code long[]} created by {@link EnumUtils#generateBitVectors} into the set of
-     * enum values that it represents.</p>
+     * Convert a {@code long[]} created by {@link EnumUtils#generateBitVectors} into the set of
+     * enum values that it represents.
      *
      * <p>If you store this value, beware any changes to the enum that would affect ordinal values.</p>
      * @param enumClass the class of the enum we are working with, not {@code null}
-     * @param values     the long[] bearing the representation of a set of enum values, least significant digits rightmost, not {@code null}
+     * @param values     the long[] bearing the representation of a set of enum values, the least significant digits rightmost, not {@code null}
      * @param <E>       the type of the enumeration
      * @return a set of enum values
      * @throws NullPointerException if {@code enumClass} is {@code null}

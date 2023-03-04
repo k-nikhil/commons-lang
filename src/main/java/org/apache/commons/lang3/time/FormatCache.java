@@ -21,12 +21,12 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.lang3.LocaleUtils;
-import org.apache.commons.lang3.Validate;
 
 /**
  * FormatCache is a cache and factory for {@link Format}s.
@@ -70,7 +70,7 @@ abstract class FormatCache<F extends Format> {
      * @throws IllegalArgumentException if pattern is invalid
      */
     public F getInstance(final String pattern, final TimeZone timeZone, final Locale locale) {
-        Validate.notNull(pattern, "pattern");
+        Objects.requireNonNull(pattern, "pattern");
         final TimeZone actualTimeZone = TimeZones.toTimeZone(timeZone);
         final Locale actualLocale = LocaleUtils.toLocale(locale);
         final ArrayKey key = new ArrayKey(pattern, actualTimeZone, actualLocale);
@@ -193,7 +193,7 @@ abstract class FormatCache<F extends Format> {
     }
 
     /**
-     * Helper class to hold multi-part Map keys as arrays.
+     * Helper class to hold multipart Map keys as arrays.
      */
     private static final class ArrayKey {
 
@@ -208,7 +208,7 @@ abstract class FormatCache<F extends Format> {
         private final int hashCode;
 
         /**
-         * Constructs an instance of {@code MultipartKey} to hold the specified objects.
+         * Constructs an instance of {@link MultipartKey} to hold the specified objects.
          *
          * @param keys the set of objects that make up the key.  Each key may be null.
          */

@@ -43,7 +43,7 @@ import org.junit.jupiter.api.Test;
  * Unit tests {@link org.apache.commons.lang3.ArrayUtils}.
  */
 @SuppressWarnings("deprecation") // deliberate use of deprecated code
-public class ArrayUtilsTest {
+public class ArrayUtilsTest extends AbstractLangTest {
 
     private class TestClass {
         // empty
@@ -1646,7 +1646,7 @@ public class ArrayUtilsTest {
 
     @Test
     public void testIsSortedNullComparator() {
-        assertThrows(IllegalArgumentException.class, () -> ArrayUtils.isSorted(null, null));
+        assertThrows(NullPointerException.class, () -> ArrayUtils.isSorted(null, null));
     }
 
     @Test

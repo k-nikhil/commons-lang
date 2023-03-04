@@ -22,6 +22,7 @@ import org.apache.commons.lang3.math.NumberUtils;
  * A mutable {@code short} wrapper.
  * <p>
  * Note that as MutableShort does not extend Short, it is not treated by String.format as a Short parameter.
+ * </p>
  *
  * @see Short
  * @since 2.1
@@ -332,7 +333,7 @@ public class MutableShort extends Number implements Comparable<MutableShort>, Mu
 
     /**
      * Compares this object to the specified object. The result is {@code true} if and only if the argument
-     * is not {@code null} and is a {@code MutableShort} object that contains the same {@code short}
+     * is not {@code null} and is a {@link MutableShort} object that contains the same {@code short}
      * value as this object.
      *
      * @param obj  the object to compare with, null returns false

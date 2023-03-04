@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.lang3.AbstractLangTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,7 +43,7 @@ import org.junit.jupiter.api.Test;
  * @since 2.4
  */
 @Deprecated
-public class ExtendedMessageFormatTest {
+public class ExtendedMessageFormatTest extends AbstractLangTest {
 
     private final Map<String, FormatFactory> registry = new HashMap<>();
 
@@ -202,7 +203,7 @@ public class ExtendedMessageFormatTest {
 //    }
 
     /**
-     * Test the built in choice format.
+     * Test the built-in choice format.
      */
     @Test
     public void testBuiltInChoiceFormat() {
@@ -222,7 +223,7 @@ public class ExtendedMessageFormatTest {
     }
 
     /**
-     * Test the built in date/time formats
+     * Test the built-in date/time formats
      */
     @Test
     public void testBuiltInDateTimeFormat() {
@@ -272,7 +273,7 @@ public class ExtendedMessageFormatTest {
     }
 
     /**
-     * Test the built in number formats.
+     * Test the built-in number formats.
      */
     @Test
     public void testBuiltInNumberFormat() {
@@ -329,7 +330,7 @@ public class ExtendedMessageFormatTest {
     }
 
     /**
-     * Test a built in format for the specified Locales, plus {@code null} Locale.
+     * Test a built-in format for the specified Locales, plus {@code null} Locale.
      * @param pattern MessageFormat pattern
      * @param args MessageFormat arguments
      * @param locales to test
@@ -339,7 +340,7 @@ public class ExtendedMessageFormatTest {
     }
 
     /**
-     * Test a built in format for the specified Locales, plus {@code null} Locale.
+     * Test a built-in format for the specified Locales, plus {@code null} Locale.
      * @param pattern MessageFormat pattern
      * @param fmtRegistry FormatFactory registry to use
      * @param args MessageFormat arguments

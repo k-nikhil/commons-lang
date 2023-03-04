@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Unit tests {@link org.apache.commons.lang3.StringUtils} - Equals/IndexOf methods
  */
-public class StringUtilsEqualsIndexOfTest  {
+public class StringUtilsEqualsIndexOfTest extends AbstractLangTest {
 
     private static final String BAR = "bar";
 
@@ -369,7 +369,7 @@ public class StringUtilsEqualsIndexOfTest  {
     }
 
     /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
+     * See https://www.oracle.com/technical-resources/articles/javase/supplementary.html
      */
     @Test
     public void testIndexOfAny_StringCharArrayWithSupplementaryChars() {
@@ -415,7 +415,7 @@ public class StringUtilsEqualsIndexOfTest  {
     }
 
     /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
+     * See https://www.oracle.com/technical-resources/articles/javase/supplementary.html
      */
     @Test
     public void testIndexOfAny_StringStringWithSupplementaryChars() {

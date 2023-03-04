@@ -44,7 +44,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Unit tests {@link org.apache.commons.lang3.SerializationUtils}.
  */
-public class SerializationUtilsTest {
+public class SerializationUtilsTest extends AbstractLangTest {
 
   static final String CLASS_NOT_FOUND_MESSAGE = "ClassNotFoundSerialization.readObject fake exception";
     protected static final String SERIALIZE_IO_EXCEPTION_MESSAGE = "Anonymous OutputStream I/O exception";
@@ -238,7 +238,6 @@ public class SerializationUtilsTest {
         final HashMap<Object, Object> newMap = SerializationUtils.roundtrip(iMap);
         assertEquals(iMap, newMap);
     }
-
 
     @Test
     public void testSerializeBytes() throws Exception {

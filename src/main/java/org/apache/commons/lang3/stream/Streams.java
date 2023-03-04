@@ -19,9 +19,14 @@ package org.apache.commons.lang3.stream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.Spliterators.AbstractSpliterator;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
@@ -31,6 +36,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.function.Failable;
@@ -123,11 +129,52 @@ public class Streams {
     }
 
     /**
+     * Helps implement {@link Streams#of(Enumeration)}.
+     *
+     * @param <T> The element type.
+     */
+    private static class EnumerationSpliterator<T> extends AbstractSpliterator<T> {
+
+        private final Enumeration<T> enumeration;
+
+        /**
+         * Creates a spliterator reporting the given estimated size and additionalCharacteristics.
+         *
+         * @param estimatedSize the estimated size of this spliterator if known, otherwise {@code Long.MAX_VALUE}.
+         * @param additionalCharacteristics properties of this spliterator's source or elements. If {@code SIZED} is reported then this spliterator will
+         *        additionally report {@code SUBSIZED}.
+         * @param enumeration The Enumeration to wrap.
+         */
+        protected EnumerationSpliterator(final long estimatedSize, final int additionalCharacteristics, final Enumeration<T> enumeration) {
+            super(estimatedSize, additionalCharacteristics);
+            this.enumeration = Objects.requireNonNull(enumeration, "enumeration");
+        }
+
+        @Override
+        public void forEachRemaining(final Consumer<? super T> action) {
+            while (enumeration.hasMoreElements()) {
+                next(action);
+            }
+        }
+
+        private boolean next(final Consumer<? super T> action) {
+            action.accept(enumeration.nextElement());
+            return true;
+
+        }
+
+        @Override
+        public boolean tryAdvance(final Consumer<? super T> action) {
+            return enumeration.hasMoreElements() && next(action);
+        }
+    }
+
+    /**
      * A reduced, and simplified version of a {@link Stream} with failable method signatures.
      *
      * @param <T> The streams element type.
      */
-    public static class FailableStream<T extends Object> {
+    public static class FailableStream<T> {
 
         private Stream<T> stream;
         private boolean terminated;
@@ -195,12 +242,12 @@ public class Streams {
         }
 
         /**
-         * Performs a mutable reduction operation on the elements of this stream using a {@code Collector}. A {@code Collector}
+         * Performs a mutable reduction operation on the elements of this stream using a {@link Collector}. A {@link Collector}
          * encapsulates the functions used as arguments to {@link #collect(Supplier, BiConsumer, BiConsumer)}, allowing for
          * reuse of collection strategies and composition of collect operations such as multiple-level grouping or partitioning.
          *
          * <p>
-         * If the underlying stream is parallel, and the {@code Collector} is concurrent, and either the stream is unordered or
+         * If the underlying stream is parallel, and the {@link Collector} is concurrent, and either the stream is unordered or
          * the collector is unordered, then a concurrent reduction will be performed (see {@link Collector} for details on
          * concurrent reduction.)
          * </p>
@@ -212,7 +259,7 @@ public class Streams {
          * <p>
          * When executed in parallel, multiple intermediate results may be instantiated, populated, and merged so as to maintain
          * isolation of mutable data structures. Therefore, even when executed in parallel with non-thread-safe data structures
-         * (such as {@code ArrayList}), no additional synchronization is needed for a parallel reduction.
+         * (such as {@link ArrayList}), no additional synchronization is needed for a parallel reduction.
          * </p>
          *
          * Note The following will accumulate strings into an ArrayList:
@@ -234,7 +281,7 @@ public class Streams {
          * </pre>
          *
          * <p>
-         * The following will classify {@code Person} objects by state and city, cascading two {@code Collector}s together:
+         * The following will classify {@code Person} objects by state and city, cascading two {@link Collector}s together:
          * </p>
          *
          * <pre>
@@ -245,8 +292,8 @@ public class Streams {
          * </pre>
          *
          * @param <R> the type of the result
-         * @param <A> the intermediate accumulation type of the {@code Collector}
-         * @param collector the {@code Collector} describing the reduction
+         * @param <A> the intermediate accumulation type of the {@link Collector}
+         * @param collector the {@link Collector} describing the reduction
          * @return the result of the reduction
          * @see #collect(Supplier, BiConsumer, BiConsumer)
          * @see Collectors
@@ -258,7 +305,7 @@ public class Streams {
 
         /**
          * Performs a mutable reduction operation on the elements of this FailableStream. A mutable reduction is one in which
-         * the reduced value is a mutable result container, such as an {@code ArrayList}, and elements are incorporated by
+         * the reduced value is a mutable result container, such as an {@link ArrayList}, and elements are incorporated by
          * updating the state of the result rather than by replacing the result. This produces a result equivalent to:
          *
          * <pre>
@@ -280,7 +327,7 @@ public class Streams {
          * </p>
          *
          * Note There are many existing classes in the JDK whose signatures are well-suited for use with method references as
-         * arguments to {@code collect()}. For example, the following will accumulate strings into an {@code ArrayList}:
+         * arguments to {@code collect()}. For example, the following will accumulate strings into an {@link ArrayList}:
          *
          * <pre>
          * {@code
@@ -485,7 +532,7 @@ public class Streams {
      * @since 3.13.0
      */
     public static <T> FailableStream<T> failableStream(final Collection<T> stream) {
-        return failableStream(toStream(stream));
+        return failableStream(of(stream));
     }
 
     /**
@@ -532,10 +579,6 @@ public class Streams {
         return new FailableStream<>(stream);
     }
 
-    private static <E> Stream<E> filter(final Collection<E> collection, final Predicate<? super E> predicate) {
-        return toStream(collection).filter(predicate);
-    }
-
     /**
      * Streams only instances of the give Class in a collection.
      * <p>
@@ -552,24 +595,109 @@ public class Streams {
      * @since 3.13.0
      */
     public static <E> Stream<E> instancesOf(final Class<? super E> clazz, final Collection<? super E> collection) {
-        return instancesOf(clazz, toStream(collection));
+        return instancesOf(clazz, of(collection));
     }
 
     @SuppressWarnings("unchecked") // After the isInstance check, we still need to type-cast.
     private static <E> Stream<E> instancesOf(final Class<? super E> clazz, final Stream<?> stream) {
-        return (Stream<E>) stream.filter(clazz::isInstance);
+        return (Stream<E>) of(stream).filter(clazz::isInstance);
     }
 
     /**
-     * Streams non-null elements of a collection.
+     * Streams the non-null elements of a collection.
      *
      * @param <E> the type of elements in the collection.
      * @param collection the collection to stream or null.
      * @return A non-null stream that filters out null elements.
      * @since 3.13.0
      */
-    public static <E> Stream<E> nullSafeStream(final Collection<E> collection) {
-        return filter(collection, Objects::nonNull);
+    public static <E> Stream<E> nonNull(final Collection<E> collection) {
+        return of(collection).filter(Objects::nonNull);
+    }
+
+    /**
+     * Streams the non-null elements of an array.
+     *
+     * @param <E> the type of elements in the collection.
+     * @param array the array to stream or null.
+     * @return A non-null stream that filters out null elements.
+     * @since 3.13.0
+     */
+    @SafeVarargs
+    public static <E> Stream<E> nonNull(final E... array) {
+        return nonNull(of(array));
+    }
+
+    /**
+     * Streams the non-null elements of a stream.
+     *
+     * @param <E> the type of elements in the collection.
+     * @param stream the stream to stream or null.
+     * @return A non-null stream that filters out null elements.
+     * @since 3.13.0
+     */
+    public static <E> Stream<E> nonNull(final Stream<E> stream) {
+        return of(stream).filter(Objects::nonNull);
+    }
+
+    /**
+     * Delegates to {@link Collection#stream()} or returns {@link Stream#empty()} if the collection is null.
+     *
+     * @param <E> the type of elements in the collection.
+     * @param collection the collection to stream or null.
+     * @return {@link Collection#stream()} or {@link Stream#empty()} if the collection is null.
+     * @since 3.13.0
+     */
+    public static <E> Stream<E> of(final Collection<E> collection) {
+        return collection == null ? Stream.empty() : collection.stream();
+    }
+
+    /**
+     * Streams the elements of the given enumeration in order.
+     *
+     * @param <E> The enumeration element type.
+     * @param enumeration The enumeration to stream.
+     * @return a new stream.
+     * @since 3.13.0
+     */
+    public static <E> Stream<E> of(final Enumeration<E> enumeration) {
+        return StreamSupport.stream(new EnumerationSpliterator<>(Long.MAX_VALUE, Spliterator.ORDERED, enumeration), false);
+    }
+
+    /**
+     * Creates a stream on the given Iterable.
+     *
+     * @param <E> the type of elements in the Iterable.
+     * @param iterable the Iterable to stream or null.
+     * @return a new Stream or {@link Stream#empty()} if the Iterable is null.
+     * @since 3.13.0
+     */
+    public static <E> Stream<E> of(final Iterable<E> iterable) {
+        return iterable == null ? Stream.empty() : StreamSupport.stream(iterable.spliterator(), false);
+    }
+
+    /**
+     * Creates a stream on the given Iterator.
+     *
+     * @param <E> the type of elements in the Iterator.
+     * @param iterator the Iterator to stream or null.
+     * @return a new Stream or {@link Stream#empty()} if the Iterator is null.
+     * @since 3.13.0
+     */
+    public static <E> Stream<E> of(final Iterator<E> iterator) {
+        return iterator == null ? Stream.empty() : StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false);
+    }
+
+    /**
+     * Returns the stream or {@link Stream#empty()} if the stream is null.
+     *
+     * @param <E> the type of elements in the collection.
+     * @param stream the stream to stream or null.
+     * @return the stream or {@link Stream#empty()} if the stream is null.
+     * @since 3.13.0
+     */
+    private static <E> Stream<E> of(final Stream<E> stream) {
+        return stream == null ? Stream.empty() : stream;
     }
 
     /**
@@ -676,25 +804,13 @@ public class Streams {
     }
 
     /**
-     * Returns a {@code Collector} that accumulates the input elements into a new array.
+     * Returns a {@link Collector} that accumulates the input elements into a new array.
      *
      * @param pElementType Type of an element in the array.
      * @param <T> the type of the input elements
-     * @return a {@code Collector} which collects all the input elements into an array, in encounter order
+     * @return a {@link Collector} which collects all the input elements into an array, in encounter order
      */
-    public static <T extends Object> Collector<T, ?, T[]> toArray(final Class<T> pElementType) {
+    public static <T> Collector<T, ?, T[]> toArray(final Class<T> pElementType) {
         return new ArrayCollector<>(pElementType);
-    }
-
-    /**
-     * Delegates to {@link Collection#stream()} or returns {@link Stream#empty()} if the collection is null.
-     *
-     * @param <E> the type of elements in the collection.
-     * @param collection the collection to stream or null.
-     * @return {@link Collection#stream()} or {@link Stream#empty()} if the collection is null.
-     * @since 3.13.0
-     */
-    public static <E> Stream<E> toStream(final Collection<E> collection) {
-        return collection == null ? Stream.empty() : collection.stream();
     }
 }

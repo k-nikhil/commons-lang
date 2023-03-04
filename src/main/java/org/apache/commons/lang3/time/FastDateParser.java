@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -42,8 +43,8 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.LocaleUtils;
 
 /**
- * <p>FastDateParser is a fast and thread-safe version of
- * {@link java.text.SimpleDateFormat}.</p>
+ * FastDateParser is a fast and thread-safe version of
+ * {@link java.text.SimpleDateFormat}.
  *
  * <p>To obtain a proxy to a FastDateParser, use {@link FastDateFormat#getInstance(String, TimeZone, Locale)}
  * or another variation of the factory methods of {@link FastDateFormat}.</p>
@@ -54,11 +55,11 @@ import org.apache.commons.lang3.LocaleUtils;
  * </code>
  *
  * <p>This class can be used as a direct replacement for
- * {@code SimpleDateFormat} in most parsing situations.
+ * {@link SimpleDateFormat} in most parsing situations.
  * This class is especially useful in multi-threaded server environments.
- * {@code SimpleDateFormat} is not thread-safe in any JDK version,
+ * {@link SimpleDateFormat} is not thread-safe in any JDK version,
  * nor will it be as Sun has closed the
- * <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4228335">bug</a>/RFE.
+ * <a href="https://bugs.java.com/bugdatabase/view_bug.do?bug_id=4228335">bug</a>/RFE.
  * </p>
  *
  * <p>Only parsing is supported by this class, but all patterns are compatible with
@@ -112,7 +113,7 @@ public class FastDateParser implements DateParser, Serializable {
     private static final Comparator<String> LONGER_FIRST_LOWERCASE = Comparator.reverseOrder();
 
     /**
-     * <p>Constructs a new FastDateParser.</p>
+     * Constructs a new FastDateParser.
      *
      * Use {@link FastDateFormat#getInstance(String, TimeZone, Locale)} or another variation of the
      * factory methods of {@link FastDateFormat} to get a cached FastDateParser instance.
@@ -127,7 +128,7 @@ public class FastDateParser implements DateParser, Serializable {
     }
 
     /**
-     * <p>Constructs a new FastDateParser.</p>
+     * Constructs a new FastDateParser.
      *
      * @param pattern non-null {@link java.text.SimpleDateFormat} compatible
      *  pattern
@@ -304,7 +305,7 @@ public class FastDateParser implements DateParser, Serializable {
 
     // Basics
     /**
-     * <p>Compares another object for equality with this object.</p>
+     * Compares another object for equality with this object.
      *
      * @param obj  the object to compare to
      * @return {@code true}if equal to this instance
@@ -319,7 +320,7 @@ public class FastDateParser implements DateParser, Serializable {
     }
 
     /**
-     * <p>Returns a hash code compatible with equals.</p>
+     * Returns a hash code compatible with equals.
      *
      * @return a hash code compatible with equals
      */
@@ -329,7 +330,7 @@ public class FastDateParser implements DateParser, Serializable {
     }
 
     /**
-     * <p>Gets a string version of this formatter.</p>
+     * Gets a string version of this formatter.
      *
      * @return a debugging string
      */
@@ -366,7 +367,7 @@ public class FastDateParser implements DateParser, Serializable {
     }
 
     /* (non-Javadoc)
-     * @see org.apache.commons.lang3.time.DateParser#parseObject(java.lang.String)
+     * @see org.apache.commons.lang3.time.DateParser#parseObject(String)
      */
     @Override
     public Object parseObject(final String source) throws ParseException {
@@ -374,7 +375,7 @@ public class FastDateParser implements DateParser, Serializable {
     }
 
     /* (non-Javadoc)
-     * @see org.apache.commons.lang3.time.DateParser#parse(java.lang.String)
+     * @see org.apache.commons.lang3.time.DateParser#parse(String)
      */
     @Override
     public Date parse(final String source) throws ParseException {
@@ -392,7 +393,7 @@ public class FastDateParser implements DateParser, Serializable {
     }
 
     /* (non-Javadoc)
-     * @see org.apache.commons.lang3.time.DateParser#parseObject(java.lang.String, java.text.ParsePosition)
+     * @see org.apache.commons.lang3.time.DateParser#parseObject(String, java.text.ParsePosition)
      */
     @Override
     public Object parseObject(final String source, final ParsePosition pos) {
@@ -409,7 +410,7 @@ public class FastDateParser implements DateParser, Serializable {
      * given by {@link ParsePosition#getIndex()} has been updated. If the input buffer has been fully
      * parsed, then the index will point to just after the end of the input buffer.
      *
-     * @see org.apache.commons.lang3.time.DateParser#parse(java.lang.String, java.text.ParsePosition)
+     * @see org.apache.commons.lang3.time.DateParser#parse(String, java.text.ParsePosition)
      */
     @Override
     public Date parse(final String source, final ParsePosition pos) {
@@ -484,21 +485,19 @@ public class FastDateParser implements DateParser, Serializable {
      * @param regex The regular expression to build
      * @return The map of string display names to field values
      */
-    private static Map<String, Integer> appendDisplayNames(final Calendar calendar, Locale locale, final int field,
-        final StringBuilder regex) {
+    private static Map<String, Integer> appendDisplayNames(final Calendar calendar, final Locale locale, final int field,
+            final StringBuilder regex) {
         final Map<String, Integer> values = new HashMap<>();
-        locale = LocaleUtils.toLocale(locale);
-        final Map<String, Integer> displayNames = calendar.getDisplayNames(field, Calendar.ALL_STYLES, locale);
+        final Locale actualLocale = LocaleUtils.toLocale(locale);
+        final Map<String, Integer> displayNames = calendar.getDisplayNames(field, Calendar.ALL_STYLES, actualLocale);
         final TreeSet<String> sorted = new TreeSet<>(LONGER_FIRST_LOWERCASE);
-        for (final Map.Entry<String, Integer> displayName : displayNames.entrySet()) {
-            final String key = displayName.getKey().toLowerCase(locale);
-            if (sorted.add(key)) {
-                values.put(key, displayName.getValue());
+        displayNames.forEach((k, v) -> {
+            final String keyLc = k.toLowerCase(actualLocale);
+            if (sorted.add(keyLc)) {
+                values.put(keyLc, v);
             }
-        }
-        for (final String symbol : sorted) {
-            simpleQuote(regex, symbol).append('|');
-        }
+        });
+        sorted.forEach(symbol -> simpleQuote(regex, symbol).append('|'));
         return values;
     }
 
@@ -668,7 +667,7 @@ public class FastDateParser implements DateParser, Serializable {
      */
     private Strategy getLocaleSpecificStrategy(final int field, final Calendar definingCalendar) {
         final ConcurrentMap<Locale, Strategy> cache = getCache(field);
-        return cache.computeIfAbsent(locale, k -> (field == Calendar.ZONE_OFFSET ? new TimeZoneStrategy(locale) : new CaseInsensitiveTextStrategy(field, definingCalendar, locale)));
+        return cache.computeIfAbsent(locale, k -> field == Calendar.ZONE_OFFSET ? new TimeZoneStrategy(locale) : new CaseInsensitiveTextStrategy(field, definingCalendar, locale));
     }
 
     /**
@@ -951,10 +950,8 @@ public class FastDateParser implements DateParser, Serializable {
                 }
             }
             // order the regex alternatives with longer strings first, greedy
-            // match will ensure longest string will be consumed
-            for (final String zoneName : sorted) {
-                simpleQuote(sb.append('|'), zoneName);
-            }
+            // match will ensure the longest string will be consumed
+            sorted.forEach(zoneName -> simpleQuote(sb.append('|'), zoneName));
             sb.append(")");
             createPattern(sb);
         }

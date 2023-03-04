@@ -24,6 +24,9 @@ on:
   schedule:
     - cron: '33 9 * * 4'
 
+permissions:
+  contents: read
+
 jobs:
   analyze:
     name: Analyze
@@ -42,7 +45,15 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+      with:
+        persist-credentials: false
+    - uses: actions/cache@v3.2.6
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL

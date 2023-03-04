@@ -18,9 +18,10 @@
 package org.apache.commons.lang3.mutable;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
- * A mutable {@code Object} wrapper.
+ * A mutable {@link Object} wrapper.
  *
  * @param <T> the type to set and get
  * @since 2.1
@@ -73,11 +74,9 @@ public class MutableObject<T> implements Mutable<T>, Serializable {
     }
 
     /**
-     * <p>
      * Compares this object against the specified object. The result is {@code true} if and only if the argument
-     * is not {@code null} and is a {@code MutableObject} object that contains the same {@code T}
+     * is not {@code null} and is a {@link MutableObject} object that contains the same {@link T}
      * value as this object.
-     * </p>
      *
      * @param obj  the object to compare with, {@code null} returns {@code false}
      * @return  {@code true} if the objects are the same;
@@ -106,7 +105,7 @@ public class MutableObject<T> implements Mutable<T>, Serializable {
      */
     @Override
     public int hashCode() {
-        return value == null ? 0 : value.hashCode();
+        return Objects.hashCode(value);
     }
 
     /**
@@ -116,7 +115,7 @@ public class MutableObject<T> implements Mutable<T>, Serializable {
      */
     @Override
     public String toString() {
-        return value == null ? "null" : value.toString();
+        return Objects.toString(value);
     }
 
 }

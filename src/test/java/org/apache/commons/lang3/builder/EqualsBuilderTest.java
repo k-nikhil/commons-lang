@@ -24,14 +24,18 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+import org.apache.commons.lang3.AbstractLangTest;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests {@link org.apache.commons.lang3.builder.EqualsBuilder}.
  */
-public class EqualsBuilderTest {
+public class EqualsBuilderTest extends AbstractLangTest {
 
 
     static class TestObject {
@@ -341,7 +345,7 @@ public class EqualsBuilderTest {
      *
      * @param to             a TestObject
      * @param toBis          a TestObject, equal to to and toTer
-     * @param toTer          Left hand side, equal to to and toBis
+     * @param toTer          left-hand side, equal to to and toBis
      * @param to2            a different TestObject
      * @param oToChange      a TestObject that will be changed
      * @param testTransients whether to test transient instance variables
@@ -441,6 +445,14 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1_b, o1_a).isEquals());
 
         assertFalse(new EqualsBuilder().setTestRecursive(true).append(o1_b, o2).isEquals());
+    }
+
+    @Test
+    public void testObjectsBypassReflectionClasses() {
+        final List<Class<?>> bypassReflectionClasses = new ArrayList<>();
+        bypassReflectionClasses.add(List.class);
+        bypassReflectionClasses.add(Boolean.class);
+        assertTrue(new EqualsBuilder().setBypassReflectionClasses(bypassReflectionClasses).isEquals());
     }
 
     @Test
@@ -1185,7 +1197,7 @@ public class EqualsBuilderTest {
     /**
      * Tests two instances of classes that can be equal and that are not "related". The two classes are not subclasses
      * of each other and do not share a parent aside from Object.
-     * See https://issues.apache.org/bugzilla/show_bug.cgi?id=33069
+     * See https://issues.apache.org/jira/browse/LANG-6
      */
     @Test
     public void testUnrelatedClasses() {
@@ -1209,7 +1221,7 @@ public class EqualsBuilderTest {
     }
 
     /**
-     * Test from https://issues.apache.org/bugzilla/show_bug.cgi?id=33067
+     * Test from https://issues.apache.org/jira/browse/LANG-42
      */
     @Test
     public void testNpeForNullElement() {
@@ -1217,7 +1229,7 @@ public class EqualsBuilderTest {
         final Object[] x2 = {Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3)};
 
         // causes an NPE in 2.0 according to:
-        // https://issues.apache.org/bugzilla/show_bug.cgi?id=33067
+        // https://issues.apache.org/jira/browse/LANG-42
         new EqualsBuilder().append(x1, x2);
     }
 
@@ -1244,6 +1256,11 @@ public class EqualsBuilderTest {
         // still equal as long as both differing fields are among excluded
         assertTrue(EqualsBuilder.reflectionEquals(x1, x2, "one", "two", "three"));
         assertTrue(EqualsBuilder.reflectionEquals(x1, x2, "one", "two", "three", "xxx"));
+
+        // still equal as long as both differing fields are among excluded
+        assertTrue(EqualsBuilder.reflectionEquals(x1, x2, Arrays.asList("one", "two", "three")));
+        assertTrue(EqualsBuilder.reflectionEquals(x1, x2,  Arrays.asList("one", "two", "three", "xxx")));
+
     }
 
     static class TestObjectWithMultipleFields {

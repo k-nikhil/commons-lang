@@ -22,6 +22,7 @@ import org.apache.commons.lang3.math.NumberUtils;
  * A mutable {@code long} wrapper.
  * <p>
  * Note that as MutableLong does not extend Long, it is not treated by String.format as a Long parameter.
+ * </p>
  *
  * @see Long
  * @since 2.1
@@ -322,7 +323,7 @@ public class MutableLong extends Number implements Comparable<MutableLong>, Muta
 
     /**
      * Compares this object to the specified object. The result is {@code true} if and only if the argument
-     * is not {@code null} and is a {@code MutableLong} object that contains the same {@code long}
+     * is not {@code null} and is a {@link MutableLong} object that contains the same {@code long}
      * value as this object.
      *
      * @param obj  the object to compare with, null returns false

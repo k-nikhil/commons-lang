@@ -27,10 +27,11 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
- * <p>Assists with the serialization process and performs additional functionality based
- * on serialization.</p>
+ * Assists with the serialization process and performs additional functionality based
+ * on serialization.
  *
  * <ul>
  * <li>Deep clone using serialization
@@ -47,17 +48,17 @@ import java.util.Map;
 public class SerializationUtils {
 
     /**
-     * <p>Custom specialization of the standard JDK {@link java.io.ObjectInputStream}
-     * that uses a custom  {@code ClassLoader} to resolve a class.
-     * If the specified {@code ClassLoader} is not able to resolve the class,
+     * Custom specialization of the standard JDK {@link java.io.ObjectInputStream}
+     * that uses a custom  {@link ClassLoader} to resolve a class.
+     * If the specified {@link ClassLoader} is not able to resolve the class,
      * the context classloader of the current thread will be used.
      * This way, the standard deserialization work also in web-application
      * containers and application servers, no matter in which of the
-     * {@code ClassLoader} the particular class that encapsulates
-     * serialization/deserialization lives. </p>
+     * {@link ClassLoader} the particular class that encapsulates
+     * serialization/deserialization lives.
      *
      * <p>For more in-depth information about the problem for which this
-     * class here is a workaround, see the JIRA issue LANG-626. </p>
+     * class here is a workaround, see the JIRA issue LANG-626.</p>
      */
      static class ClassLoaderAwareObjectInputStream extends ObjectInputStream {
         private static final Map<String, Class<?>> primitiveTypes =
@@ -79,7 +80,7 @@ public class SerializationUtils {
 
         /**
          * Constructor.
-         * @param in The {@code InputStream}.
+         * @param in The {@link InputStream}.
          * @param classLoader classloader to use
          * @throws IOException if an I/O error occurs while reading stream header.
          * @see java.io.ObjectInputStream
@@ -90,10 +91,10 @@ public class SerializationUtils {
         }
 
         /**
-         * Overridden version that uses the parameterized {@code ClassLoader} or the {@code ClassLoader}
-         * of the current {@code Thread} to resolve the class.
-         * @param desc An instance of class {@code ObjectStreamClass}.
-         * @return A {@code Class} object corresponding to {@code desc}.
+         * Overridden version that uses the parameterized {@link ClassLoader} or the {@link ClassLoader}
+         * of the current {@link Thread} to resolve the class.
+         * @param desc An instance of class {@link ObjectStreamClass}.
+         * @return A {@link Class} object corresponding to {@code desc}.
          * @throws IOException Any of the usual Input/Output exceptions.
          * @throws ClassNotFoundException If class of a serialized object cannot be found.
          */
@@ -118,16 +119,16 @@ public class SerializationUtils {
     }
 
     /**
-     * <p>Deep clone an {@code Object} using serialization.</p>
+     * Deep clone an {@link Object} using serialization.
      *
      * <p>This is many times slower than writing clone methods by hand
      * on all objects in your object graph. However, for complex object
      * graphs, or for those that don't support deep cloning this can
      * be a simple alternative implementation. Of course all the objects
-     * must be {@code Serializable}.</p>
+     * must be {@link Serializable}.</p>
      *
      * @param <T> the type of the object involved
-     * @param object  the {@code Serializable} object to clone
+     * @param object  the {@link Serializable} object to clone
      * @return the cloned object
      * @throws SerializationException (runtime) if the serialization fails
      */
@@ -153,9 +154,7 @@ public class SerializationUtils {
     }
 
     /**
-     * <p>
-     * Deserializes a single {@code Object} from an array of bytes.
-     * </p>
+     * Deserializes a single {@link Object} from an array of bytes.
      *
      * <p>
      * If the call site incorrectly types the return value, a {@link ClassCastException} is thrown from the call site.
@@ -171,14 +170,12 @@ public class SerializationUtils {
      * @throws SerializationException (runtime) if the serialization fails
      */
     public static <T> T deserialize(final byte[] objectData) {
-        Validate.notNull(objectData, "objectData");
+        Objects.requireNonNull(objectData, "objectData");
         return deserialize(new ByteArrayInputStream(objectData));
     }
 
     /**
-     * <p>
-     * Deserializes an {@code Object} from the specified stream.
-     * </p>
+     * Deserializes an {@link Object} from the specified stream.
      *
      * <p>
      * The stream will be closed once the object is written. This avoids the need for a finally clause, and maybe also
@@ -205,7 +202,7 @@ public class SerializationUtils {
      */
     @SuppressWarnings("resource") // inputStream is managed by the caller
     public static <T> T deserialize(final InputStream inputStream) {
-        Validate.notNull(inputStream, "inputStream");
+        Objects.requireNonNull(inputStream, "inputStream");
         try (ObjectInputStream in = new ObjectInputStream(inputStream)) {
             @SuppressWarnings("unchecked")
             final T obj = (T) in.readObject();
@@ -232,8 +229,8 @@ public class SerializationUtils {
     }
 
     /**
-     * <p>Serializes an {@code Object} to a byte array for
-     * storage/serialization.</p>
+     * Serializes an {@link Object} to a byte array for
+     * storage/serialization.
      *
      * @param obj  the object to serialize to bytes
      * @return a byte[] with the converted Serializable
@@ -246,7 +243,7 @@ public class SerializationUtils {
     }
 
     /**
-     * <p>Serializes an {@code Object} to the specified stream.</p>
+     * Serializes an {@link Object} to the specified stream.
      *
      * <p>The stream will be closed once the object is written.
      * This avoids the need for a finally clause, and maybe also exception
@@ -262,7 +259,7 @@ public class SerializationUtils {
      */
     @SuppressWarnings("resource") // outputStream is managed by the caller
     public static void serialize(final Serializable obj, final OutputStream outputStream) {
-        Validate.notNull(outputStream, "outputStream");
+        Objects.requireNonNull(outputStream, "outputStream");
         try (ObjectOutputStream out = new ObjectOutputStream(outputStream)) {
             out.writeObject(obj);
         } catch (final IOException ex) {
@@ -271,8 +268,8 @@ public class SerializationUtils {
     }
 
     /**
-     * <p>SerializationUtils instances should NOT be constructed in standard programming.
-     * Instead, the class should be used as {@code SerializationUtils.clone(object)}.</p>
+     * SerializationUtils instances should NOT be constructed in standard programming.
+     * Instead, the class should be used as {@code SerializationUtils.clone(object)}.
      *
      * <p>This constructor is public to permit tools that require a JavaBean instance
      * to operate.</p>

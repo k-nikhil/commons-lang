@@ -29,12 +29,14 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.AbstractLangTest;
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.Test;
 
 /**
  * Test class for {@code EventCountCircuitBreaker}.
  */
-public class EventCountCircuitBreakerTest {
+public class EventCountCircuitBreakerTest extends AbstractLangTest {
     /** Constant for the opening threshold. */
     private static final int OPENING_THRESHOLD = 10;
 
@@ -406,8 +408,7 @@ public class EventCountCircuitBreakerTest {
          * @param values the expected values
          */
         public void verify(final Boolean... values) {
-            assertArrayEquals(values,
-                    changedValues.toArray(new Boolean[0]));
+            assertArrayEquals(values, changedValues.toArray(ArrayUtils.EMPTY_BOOLEAN_OBJECT_ARRAY));
         }
     }
 }

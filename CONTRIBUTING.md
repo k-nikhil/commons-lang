@@ -55,13 +55,13 @@ Getting Started
   + Clearly describe the issue including steps to reproduce when it is a bug.
   + Make sure you fill in the earliest version that you know has the issue.
 + Find the corresponding [repository on GitHub](https://github.com/apache/?query=commons-),
-[fork](https://help.github.com/articles/fork-a-repo/) and check out your forked repository.
+[fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) and check out your forked repository.
 
 Making Changes
 --------------
 
 + Create a _topic branch_ for your isolated work.
-  * Usually you should base your branch on the `master` or `trunk` branch.
+  * Usually you should base your branch on the `master` branch.
   * A good topic branch name can be the JIRA bug id plus a keyword, e.g. `LANG-123-InputStream`.
   * If you have submitted multiple JIRA issues, try to maintain separate branches and pull requests.
 + Make commits of logical units.
@@ -106,8 +106,8 @@ Additional Resources
 + [Contributing patches](https://commons.apache.org/patches.html)
 + [Apache Commons Lang JIRA project page][jira]
 + [Contributor License Agreement][cla]
-+ [General GitHub documentation](https://help.github.com/)
-+ [GitHub pull request documentation](https://help.github.com/articles/creating-a-pull-request/)
++ [General GitHub documentation](https://docs.github.com/)
++ [GitHub pull request documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)
 + [Apache Commons Twitter Account](https://twitter.com/ApacheCommons)
 + `#apache-commons` IRC channel on `irc.freenode.net`
 

@@ -22,6 +22,7 @@ import org.apache.commons.lang3.math.NumberUtils;
  * A mutable {@code int} wrapper.
  * <p>
  * Note that as MutableInt does not extend Integer, it is not treated by String.format as an Integer parameter.
+ * </p>
  *
  * @see Integer
  * @since 2.1
@@ -314,7 +315,7 @@ public class MutableInt extends Number implements Comparable<MutableInt>, Mutabl
     /**
      * Gets this mutable as an instance of Integer.
      *
-     * @return a Integer instance containing the value from this mutable, never null
+     * @return an Integer instance containing the value from this mutable, never null
      */
     public Integer toInteger() {
         return Integer.valueOf(intValue());
@@ -322,7 +323,7 @@ public class MutableInt extends Number implements Comparable<MutableInt>, Mutabl
 
     /**
      * Compares this object to the specified object. The result is {@code true} if and only if the argument is
-     * not {@code null} and is a {@code MutableInt} object that contains the same {@code int} value
+     * not {@code null} and is a {@link MutableInt} object that contains the same {@code int} value
      * as this object.
      *
      * @param obj  the object to compare with, null returns false

@@ -25,12 +25,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.commons.lang3.arch.Processor;
 import org.apache.commons.lang3.arch.Processor.Arch;
+import org.apache.commons.lang3.arch.Processor.Type;
 import org.junit.jupiter.api.Test;
 
 /**
  * Test class for {@link ArchUtils}.
  */
-public class ArchUtilsTest {
+public class ArchUtilsTest extends AbstractLangTest {
 
     private static final String IA64 = "ia64";
     private static final String IA64_32 = "ia64_32";
@@ -110,9 +111,22 @@ public class ArchUtilsTest {
     }
 
     @Test
+    public void testTypeLabels() {
+        for (final Type type : Type.values()) {
+            // Only test label presence.
+            assertFalse(type.getLabel().isEmpty());
+        }
+    }
+
+    @Test
     public void testGetProcessor() {
         assertNotNull(ArchUtils.getProcessor(X86));
         assertNull(ArchUtils.getProcessor("NA"));
+        assertNull(ArchUtils.getProcessor(null));
+
+        final Processor processor = ArchUtils.getProcessor();
+        assertTrue(processor.isX86());
+        assertNotEquals(ObjectUtils.identityToString(processor), processor.toString());
     }
 
     @Test

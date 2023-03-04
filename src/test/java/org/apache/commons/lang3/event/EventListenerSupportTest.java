@@ -29,19 +29,21 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
 
+import org.apache.commons.lang3.AbstractLangTest;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 
 /**
  * @since 3.0
  */
-public class EventListenerSupportTest {
+public class EventListenerSupportTest extends AbstractLangTest {
 
     @Test
     public void testAddListenerNoDuplicates() {
@@ -173,22 +175,17 @@ public class EventListenerSupportTest {
     @Test
     public void testSubclassInvocationHandling() throws PropertyVetoException {
 
-        final
-        EventListenerSupport<VetoableChangeListener> eventListenerSupport = new EventListenerSupport<VetoableChangeListener>(
+        final EventListenerSupport<VetoableChangeListener> eventListenerSupport = new EventListenerSupport<VetoableChangeListener>(
                 VetoableChangeListener.class) {
             private static final long serialVersionUID = 1L;
 
             @Override
             protected java.lang.reflect.InvocationHandler createInvocationHandler() {
                 return new ProxyInvocationHandler() {
-                    /**
-                     * {@inheritDoc}
-                     */
                     @Override
                     public Object invoke(final Object proxy, final Method method, final Object[] args)
-                            throws Throwable {
-                        return "vetoableChange".equals(method.getName())
-                                && "Hour".equals(((PropertyChangeEvent) args[0]).getPropertyName()) ? null
+                            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+                        return "vetoableChange".equals(method.getName()) && "Hour".equals(((PropertyChangeEvent) args[0]).getPropertyName()) ? null
                                 : super.invoke(proxy, method, args);
                     }
                 };

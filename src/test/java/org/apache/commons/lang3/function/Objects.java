@@ -24,18 +24,17 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.ObjectUtils;
 
-
 /**
  * This class provides some replacements for the corresponding methods in
  * {@link java.util.Objects}. The replacements have the advantage, that they are properly
  * annotated with {@link Nullable}, and/or {@link Nonnull}, so they let the
- * compiler know, what their respective results are.
+ * compiler know what their respective results are.
  *
  * The various {@code requireNonNull} methods are particularly handy, when
  * dealing with external code, that a) doesn't support the {@link Nonnull}
  * annotation, or if you know for other reasons, that an object is non-null.
  * Take for example, a {@link java.util.Map map}, that you have filled with
- * non-null values. So, in your opinion, the following should be perfectably
+ * non-null values. So, in your opinion, the following should be perfectly
  * valid code:
  * <pre>
  *   final Map&lt;String,Object&gt; map = getMapOfNonNullValues();
@@ -62,6 +61,7 @@ import org.apache.commons.lang3.ObjectUtils;
  * @since 3.12.0
  */
 public class Objects {
+
     /**
      * Checks, whether the given object is non-null. If so, returns the non-null
      * object as a result value. Otherwise, a NullPointerException is thrown.
@@ -75,7 +75,8 @@ public class Objects {
         return requireNonNull(value, "The value must not be null.");
     }
 
-    /** Checks, whether the given object is non-null. If so, returns the non-null
+    /**
+     * Checks, whether the given object is non-null. If so, returns the non-null
      * object as a result value. Otherwise, invokes the given {@link Supplier},
      * and returns the suppliers result value.
      * @param <T> The type of parameter {@code value}, also the result type of

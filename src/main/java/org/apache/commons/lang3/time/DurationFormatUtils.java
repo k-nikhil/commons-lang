@@ -16,18 +16,20 @@
  */
 package org.apache.commons.lang3.time;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 /**
- * <p>Duration formatting utilities and constants. The following table describes the tokens
- * used in the pattern language for formatting.</p>
+ * Duration formatting utilities and constants. The following table describes the tokens
+ * used in the pattern language for formatting.
  * <table border="1">
  *  <caption>Pattern Tokens</caption>
  *  <tr><th>character</th><th>duration element</th></tr>
@@ -51,7 +53,7 @@ import org.apache.commons.lang3.Validate;
 public class DurationFormatUtils {
 
     /**
-     * <p>DurationFormatUtils instances should NOT be constructed in standard programming.</p>
+     * DurationFormatUtils instances should NOT be constructed in standard programming.
      *
      * <p>This constructor is public to permit tools that require a JavaBean instance
      * to operate.</p>
@@ -60,8 +62,8 @@ public class DurationFormatUtils {
     }
 
     /**
-     * <p>Pattern used with {@code FastDateFormat} and {@code SimpleDateFormat}
-     * for the ISO 8601 period format used in durations.</p>
+     * Pattern used with {@link FastDateFormat} and {@link SimpleDateFormat}
+     * for the ISO 8601 period format used in durations.
      *
      * @see org.apache.commons.lang3.time.FastDateFormat
      * @see java.text.SimpleDateFormat
@@ -69,7 +71,7 @@ public class DurationFormatUtils {
     public static final String ISO_EXTENDED_FORMAT_PATTERN = "'P'yyyy'Y'M'M'd'DT'H'H'm'M's.SSS'S'";
 
     /**
-     * <p>Formats the time gap as a string.</p>
+     * Formats the time gap as a string.
      *
      * <p>The format used is ISO 8601-like: {@code HH:mm:ss.SSS}.</p>
      *
@@ -82,7 +84,7 @@ public class DurationFormatUtils {
     }
 
     /**
-     * <p>Formats the time gap as a string.</p>
+     * Formats the time gap as a string.
      *
      * <p>The format used is the ISO 8601 period format.</p>
      *
@@ -98,7 +100,7 @@ public class DurationFormatUtils {
     }
 
     /**
-     * <p>Formats the time gap as a string, using the specified format, and padding with zeros.</p>
+     * Formats the time gap as a string, using the specified format, and padding with zeros.
      *
      * <p>This method formats durations using the days and lower fields of the
      * format pattern. Months and larger are not used.</p>
@@ -113,15 +115,15 @@ public class DurationFormatUtils {
     }
 
     /**
-     * <p>Formats the time gap as a string, using the specified format.
-     * Padding the left hand side of numbers with zeroes is optional.</p>
+     * Formats the time gap as a string, using the specified format.
+     * Padding the left-hand side of numbers with zeroes is optional.
      *
      * <p>This method formats durations using the days and lower fields of the
      * format pattern. Months and larger are not used.</p>
      *
      * @param durationMillis  the duration to format
      * @param format  the way in which to format the duration, not null
-     * @param padWithZeros  whether to pad the left hand side of numbers with 0's
+     * @param padWithZeros  whether to pad the left-hand side of numbers with 0's
      * @return the formatted duration, not null
      * @throws IllegalArgumentException if durationMillis is negative
      */
@@ -130,25 +132,25 @@ public class DurationFormatUtils {
 
         final Token[] tokens = lexx(format);
 
-        long days         = 0;
-        long hours        = 0;
-        long minutes      = 0;
-        long seconds      = 0;
+        long days = 0;
+        long hours = 0;
+        long minutes = 0;
+        long seconds = 0;
         long milliseconds = durationMillis;
 
-        if (Token.containsTokenWithValue(tokens, d) ) {
+        if (Token.containsTokenWithValue(tokens, d)) {
             days = milliseconds / DateUtils.MILLIS_PER_DAY;
             milliseconds = milliseconds - (days * DateUtils.MILLIS_PER_DAY);
         }
-        if (Token.containsTokenWithValue(tokens, H) ) {
+        if (Token.containsTokenWithValue(tokens, H)) {
             hours = milliseconds / DateUtils.MILLIS_PER_HOUR;
             milliseconds = milliseconds - (hours * DateUtils.MILLIS_PER_HOUR);
         }
-        if (Token.containsTokenWithValue(tokens, m) ) {
+        if (Token.containsTokenWithValue(tokens, m)) {
             minutes = milliseconds / DateUtils.MILLIS_PER_MINUTE;
             milliseconds = milliseconds - (minutes * DateUtils.MILLIS_PER_MINUTE);
         }
-        if (Token.containsTokenWithValue(tokens, s) ) {
+        if (Token.containsTokenWithValue(tokens, s)) {
             seconds = milliseconds / DateUtils.MILLIS_PER_SECOND;
             milliseconds = milliseconds - (seconds * DateUtils.MILLIS_PER_SECOND);
         }
@@ -157,7 +159,7 @@ public class DurationFormatUtils {
     }
 
     /**
-     * <p>Formats an elapsed time into a pluralization correct string.</p>
+     * Formats an elapsed time into a pluralization correct string.
      *
      * <p>This method formats durations using the days and lower fields of the
      * format pattern. Months and larger are not used.</p>
@@ -222,7 +224,7 @@ public class DurationFormatUtils {
     }
 
     /**
-     * <p>Formats the time gap as a string.</p>
+     * Formats the time gap as a string.
      *
      * <p>The format used is the ISO 8601 period format.</p>
      *
@@ -236,8 +238,8 @@ public class DurationFormatUtils {
     }
 
     /**
-     * <p>Formats the time gap as a string, using the specified format.
-     * Padding the left hand side of numbers with zeroes is optional.
+     * Formats the time gap as a string, using the specified format.
+     * Padding the left-hand side of numbers with zeroes is optional.
      *
      * @param startMillis  the start of the duration
      * @param endMillis  the end of the duration
@@ -251,8 +253,8 @@ public class DurationFormatUtils {
 
     /**
      * <p>Formats the time gap as a string, using the specified format.
-     * Padding the left hand side of numbers with zeroes is optional and
-     * the time zone may be specified. </p>
+     * Padding the left-hand side of numbers with zeroes is optional and
+     * the time zone may be specified.
      *
      * <p>When calculating the difference between months/days, it chooses to
      * calculate months first. So when working out the number of months and
@@ -260,15 +262,15 @@ public class DurationFormatUtils {
      * 23 days gained by choosing January-&gt;February = 1 month and then
      * calculating days forwards, and not the 1 month and 26 days gained by
      * choosing March -&gt; February = 1 month and then calculating days
-     * backwards. </p>
+     * backwards.</p>
      *
-     * <p>For more control, the <a href="http://joda-time.sf.net/">Joda-Time</a>
+     * <p>For more control, the <a href="https://www.joda.org/joda-time/">Joda-Time</a>
      * library is recommended.</p>
      *
      * @param startMillis  the start of the duration
      * @param endMillis  the end of the duration
      * @param format  the way in which to format the duration, not null
-     * @param padWithZeros  whether to pad the left hand side of numbers with 0's
+     * @param padWithZeros  whether to pad the left-hand side of numbers with 0's
      * @param timezone  the millis are defined in
      * @return the formatted duration, not null
      * @throws IllegalArgumentException if startMillis is greater than endMillis
@@ -406,7 +408,7 @@ public class DurationFormatUtils {
     }
 
     /**
-     * <p>The internal method to do the formatting.</p>
+     * The internal method to do the formatting.
      *
      * @param tokens  the tokens
      * @param years  the number of years
@@ -461,8 +463,8 @@ public class DurationFormatUtils {
     }
 
     /**
-     * <p>Converts a {@code long} to a {@code String} with optional
-     * zero padding.</p>
+     * Converts a {@code long} to a {@link String} with optional
+     * zero padding.
      *
      * @param value the value to convert
      * @param padWithZeros whether to pad with zeroes
@@ -577,12 +579,7 @@ public class DurationFormatUtils {
          * @return boolean {@code true} if contained
          */
         static boolean containsTokenWithValue(final Token[] tokens, final Object value) {
-            for (final Token token : tokens) {
-                if (token.getValue() == value) {
-                    return true;
-                }
-            }
-            return false;
+            return Stream.of(tokens).anyMatch(token -> token.getValue() == value);
         }
 
         private final Object value;

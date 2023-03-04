@@ -21,7 +21,7 @@ import java.util.function.Predicate;
 import org.apache.commons.lang3.ObjectUtils;
 
 /**
- * <p>Utility library to provide helper methods for translating {@link Comparable#compareTo} result into a boolean.</p>
+ * Utility library to provide helper methods for translating {@link Comparable#compareTo} result into a boolean.
  *
  * <p>Example: {@code boolean x = is(myComparable).lessThanOrEqualTo(otherComparable)}</p>
  *
@@ -207,7 +207,7 @@ public class ComparableUtils {
     }
 
     /**
-     * Returns the greater of two {@code Comparable} values, ignoring null.
+     * Returns the greater of two {@link Comparable} values, ignoring null.
      * <p>
      * For three or more values, use {@link ObjectUtils#max(Comparable...)}.
      * </p>
@@ -215,7 +215,7 @@ public class ComparableUtils {
      * @param <A> Type of what we are comparing.
      * @param comparable1 an argument.
      * @param comparable2 another argument.
-     * @return the larger of {@code c1} and {@code c2}.
+     * @return the largest of {@code c1} and {@code c2}.
      * @see ObjectUtils#max(Comparable...)
      * @since 3.13.0
      */
@@ -224,7 +224,7 @@ public class ComparableUtils {
     }
 
     /**
-     * Returns the lesser of two {@code Comparable} values, ignoring null.
+     * Returns the lesser of two {@link Comparable} values, ignoring null.
      * <p>
      * For three or more values, use {@link ObjectUtils#min(Comparable...)}.
      * </p>
@@ -232,7 +232,7 @@ public class ComparableUtils {
      * @param <A> Type of what we are comparing.
      * @param comparable1 an argument.
      * @param comparable2 another argument.
-     * @return the larger of {@code c1} and {@code c2}.
+     * @return the largest of {@code c1} and {@code c2}.
      * @see ObjectUtils#min(Comparable...)
      * @since 3.13.0
      */

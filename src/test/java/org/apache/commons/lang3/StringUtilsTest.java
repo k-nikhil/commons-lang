@@ -54,7 +54,7 @@ import org.junit.jupiter.params.provider.ValueSource;
  * which been moved to their own test classes.
  */
 @SuppressWarnings("deprecation") // deliberate use of deprecated code
-public class StringUtilsTest {
+public class StringUtilsTest extends AbstractLangTest {
 
     static final String WHITESPACE;
     static final String NON_WHITESPACE;
@@ -304,7 +304,6 @@ public class StringUtilsTest {
         assertAbbreviateWithOffset("...hijk...", 7, 10);
         assertAbbreviateWithOffset("...ijklmno", 8, 10);
         assertAbbreviateWithOffset("...ijklmno", 9, 10);
-        assertAbbreviateWithOffset("...ijklmno", 10, 10);
         assertAbbreviateWithOffset("...ijklmno", 10, 10);
         assertAbbreviateWithOffset("...ijklmno", 11, 10);
         assertAbbreviateWithOffset("...ijklmno", 12, 10);
@@ -1293,6 +1292,7 @@ public class StringUtilsTest {
         assertEquals("", StringUtils.join(Arrays.asList(NULL_ARRAY_LIST).iterator(), SEPARATOR_CHAR));
         assertEquals("", StringUtils.join(Arrays.asList(EMPTY_ARRAY_LIST).iterator(), SEPARATOR_CHAR));
         assertEquals("foo", StringUtils.join(Collections.singleton("foo").iterator(), 'x'));
+        assertEquals("null", StringUtils.join(Arrays.asList(NULL_TO_STRING_LIST).iterator(), SEPARATOR_CHAR));
     }
 
     @Test
@@ -1311,7 +1311,7 @@ public class StringUtilsTest {
 
         assertEquals(TEXT_LIST, StringUtils.join(Arrays.asList(ARRAY_LIST).iterator(), SEPARATOR));
 
-        assertNull(StringUtils.join(Arrays.asList(NULL_TO_STRING_LIST).iterator(), SEPARATOR));
+        assertEquals("null", StringUtils.join(Arrays.asList(NULL_TO_STRING_LIST).iterator(), SEPARATOR));
     }
 
     @Test
@@ -1622,13 +1622,11 @@ public class StringUtilsTest {
     @Test
     public void testRemove_char() {
         // StringUtils.remove(null, *)       = null
-        assertNull(StringUtils.remove(null, 'a'));
-        assertNull(StringUtils.remove(null, 'a'));
+        assertNull(StringUtils.remove(null, null));
         assertNull(StringUtils.remove(null, 'a'));
 
         // StringUtils.remove("", *)          = ""
-        assertEquals("", StringUtils.remove("", 'a'));
-        assertEquals("", StringUtils.remove("", 'a'));
+        assertEquals("", StringUtils.remove("", null));
         assertEquals("", StringUtils.remove("", 'a'));
 
         // StringUtils.remove("queued", 'u') = "qeed"
@@ -1726,7 +1724,7 @@ public class StringUtilsTest {
         assertEquals(StringUtils.removeEndIgnoreCase("domain.com", ""), "domain.com", "removeEndIgnoreCase(\"domain.com\", \"\")");
         assertEquals(StringUtils.removeEndIgnoreCase("domain.com", null), "domain.com", "removeEndIgnoreCase(\"domain.com\", null)");
 
-        // Case insensitive:
+        // Case-insensitive:
         assertEquals(StringUtils.removeEndIgnoreCase("www.domain.com", ".COM"), "www.domain", "removeEndIgnoreCase(\"www.domain.com\", \".COM\")");
         assertEquals(StringUtils.removeEndIgnoreCase("www.domain.COM", ".com"), "www.domain", "removeEndIgnoreCase(\"www.domain.COM\", \".com\")");
     }
@@ -1864,7 +1862,7 @@ public class StringUtilsTest {
         assertEquals(StringUtils.removeStartIgnoreCase("domain.com", ""), "domain.com", "removeStartIgnoreCase(\"domain.com\", \"\")");
         assertEquals(StringUtils.removeStartIgnoreCase("domain.com", null), "domain.com", "removeStartIgnoreCase(\"domain.com\", null)");
 
-        // Case insensitive:
+        // Case-insensitive:
         assertEquals(StringUtils.removeStartIgnoreCase("www.domain.com", "WWW."), "domain.com", "removeStartIgnoreCase(\"www.domain.com\", \"WWW.\")");
     }
 
@@ -2774,7 +2772,7 @@ public class StringUtilsTest {
         assertEquals("b", res[1]);
         assertEquals("c", res[2]);
         assertEquals("", res[3]);
-        assertEquals("", res[3]);
+        assertEquals("", res[4]);
 
         // Match example in javadoc
         {
@@ -3043,7 +3041,6 @@ public class StringUtilsTest {
                 IllegalArgumentException.class,
                 () -> StringUtils.truncate(null, Integer.MIN_VALUE),
                 "maxWith cannot be negative");
-        assertEquals("", StringUtils.truncate("", 10));
         assertEquals("", StringUtils.truncate("", 10));
         assertEquals("abc", StringUtils.truncate("abcdefghij", 3));
         assertEquals("abcdef", StringUtils.truncate("abcdefghij", 6));

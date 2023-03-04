@@ -87,9 +87,9 @@ import org.apache.commons.lang3.ObjectUtils;
  * {@link Class#getDeclaredFields()}. The fields of the class are compared first, followed by those
  * of its parent classes (in order from the bottom to the top of the class hierarchy).</p>
  *
- * @see java.lang.Comparable
- * @see java.lang.Object#equals(Object)
- * @see java.lang.Object#hashCode()
+ * @see Comparable
+ * @see Object#equals(Object)
+ * @see Object#hashCode()
  * @see EqualsBuilder
  * @see HashCodeBuilder
  * @since 1.0
@@ -102,7 +102,7 @@ public class CompareToBuilder implements Builder<Integer> {
     private int comparison;
 
     /**
-     * <p>Constructor for CompareToBuilder.</p>
+     * Constructor for CompareToBuilder.
      *
      * <p>Starts off assuming that the objects are equal. Multiple calls are
      * then made to the various append methods, followed by a call to
@@ -113,7 +113,7 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Compares two {@code Object}s via reflection.</p>
+     * Compares two {@link Object}s via reflection.
      *
      * <p>Fields can be private, thus {@code AccessibleObject.setAccessible}
      * is used to bypass normal access control checks. This will fail under a
@@ -143,7 +143,7 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Compares two {@code Object}s via reflection.</p>
+     * Compares two {@link Object}s via reflection.
      *
      * <p>Fields can be private, thus {@code AccessibleObject.setAccessible}
      * is used to bypass normal access control checks. This will fail under a
@@ -175,7 +175,7 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Compares two {@code Object}s via reflection.</p>
+     * Compares two {@link Object}s via reflection.
      *
      * <p>Fields can be private, thus {@code AccessibleObject.setAccessible}
      * is used to bypass normal access control checks. This will fail under a
@@ -208,7 +208,7 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Compares two {@code Object}s via reflection.</p>
+     * Compares two {@link Object}s via reflection.
      *
      * <p>Fields can be private, thus {@code AccessibleObject.setAccessible}
      * is used to bypass normal access control checks. This will fail under a
@@ -241,7 +241,7 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Compares two {@code Object}s via reflection.</p>
+     * Compares two {@link Object}s via reflection.
      *
      * <p>Fields can be private, thus {@code AccessibleObject.setAccessible}
      * is used to bypass normal access control checks. This will fail under a
@@ -299,13 +299,13 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Appends to {@code builder} the comparison of {@code lhs}
-     * to {@code rhs} using the fields defined in {@code clazz}.</p>
+     * Appends to {@code builder} the comparison of {@code lhs}
+     * to {@code rhs} using the fields defined in {@code clazz}.
      *
      * @param lhs  left-hand object
      * @param rhs  right-hand object
-     * @param clazz  {@code Class} that defines fields to be compared
-     * @param builder  {@code CompareToBuilder} to append to
+     * @param clazz  {@link Class} that defines fields to be compared
+     * @param builder  {@link CompareToBuilder} to append to
      * @param useTransients  whether to compare transient fields
      * @param excludeFields  fields to exclude
      */
@@ -337,8 +337,8 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Appends to the {@code builder} the {@code compareTo(Object)}
-     * result of the superclass.</p>
+     * Appends to the {@code builder} the {@code compareTo(Object)}
+     * result of the superclass.
      *
      * @param superCompareTo  result of calling {@code super.compareTo(Object)}
      * @return this - used to chain append calls
@@ -353,8 +353,8 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Appends to the {@code builder} the comparison of
-     * two {@code Object}s.</p>
+     * Appends to the {@code builder} the comparison of
+     * two {@link Object}s.
      *
      * <ol>
      * <li>Check if {@code lhs == rhs}</li>
@@ -376,8 +376,8 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Appends to the {@code builder} the comparison of
-     * two {@code Object}s.</p>
+     * Appends to the {@code builder} the comparison of
+     * two {@link Object}s.
      *
      * <ol>
      * <li>Check if {@code lhs == rhs}</li>
@@ -393,8 +393,8 @@ public class CompareToBuilder implements Builder<Integer> {
      *
      * @param lhs  left-hand object
      * @param rhs  right-hand object
-     * @param comparator  {@code Comparator} used to compare the objects,
-     *  {@code null} means treat lhs as {@code Comparable}
+     * @param comparator  {@link Comparator} used to compare the objects,
+     *  {@code null} means treat lhs as {@link Comparable}
      * @return this - used to chain append calls
      * @throws ClassCastException  if {@code rhs} is not assignment-compatible
      *  with {@code lhs}
@@ -433,7 +433,7 @@ public class CompareToBuilder implements Builder<Integer> {
 
     private void appendArray(final Object lhs, final Object rhs, final Comparator<?> comparator) {
         // switch on type of array, to dispatch to the correct handler
-        // handles multi dimensional arrays
+        // handles multidimensional arrays
         // throws a ClassCastException if rhs is not the correct array type
         if (lhs instanceof long[]) {
             append((long[]) lhs, (long[]) rhs);
@@ -539,13 +539,13 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Appends to the {@code builder} the comparison of
-     * two {@code double}s.</p>
+     * Appends to the {@code builder} the comparison of
+     * two {@code double}s.
      *
      * <p>This handles NaNs, Infinities, and {@code -0.0}.</p>
      *
      * <p>It is compatible with the hash code generated by
-     * {@code HashCodeBuilder}.</p>
+     * {@link HashCodeBuilder}.</p>
      *
      * @param lhs  left-hand value
      * @param rhs  right-hand value
@@ -560,13 +560,13 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Appends to the {@code builder} the comparison of
-     * two {@code float}s.</p>
+     * Appends to the {@code builder} the comparison of
+     * two {@code float}s.
      *
      * <p>This handles NaNs, Infinities, and {@code -0.0}.</p>
      *
      * <p>It is compatible with the hash code generated by
-     * {@code HashCodeBuilder}.</p>
+     * {@link HashCodeBuilder}.</p>
      *
      * @param lhs  left-hand value
      * @param rhs  right-hand value
@@ -604,8 +604,8 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Appends to the {@code builder} the deep comparison of
-     * two {@code Object} arrays.</p>
+     * Appends to the {@code builder} the deep comparison of
+     * two {@link Object} arrays.
      *
      * <ol>
      *  <li>Check if arrays are the same using {@code ==}</li>
@@ -628,8 +628,8 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Appends to the {@code builder} the deep comparison of
-     * two {@code Object} arrays.</p>
+     * Appends to the {@code builder} the deep comparison of
+     * two {@link Object} arrays.
      *
      * <ol>
      *  <li>Check if arrays are the same using {@code ==}</li>
@@ -643,8 +643,8 @@ public class CompareToBuilder implements Builder<Integer> {
      *
      * @param lhs  left-hand array
      * @param rhs  right-hand array
-     * @param comparator  {@code Comparator} to use to compare the array elements,
-     *  {@code null} means to treat {@code lhs} elements as {@code Comparable}.
+     * @param comparator  {@link Comparator} to use to compare the array elements,
+     *  {@code null} means to treat {@code lhs} elements as {@link Comparable}.
      * @return this - used to chain append calls
      * @throws ClassCastException  if {@code rhs} is not assignment-compatible
      *  with {@code lhs}
@@ -676,8 +676,8 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Appends to the {@code builder} the deep comparison of
-     * two {@code long} arrays.</p>
+     * Appends to the {@code builder} the deep comparison of
+     * two {@code long} arrays.
      *
      * <ol>
      *  <li>Check if arrays are the same using {@code ==}</li>
@@ -716,8 +716,8 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Appends to the {@code builder} the deep comparison of
-     * two {@code int} arrays.</p>
+     * Appends to the {@code builder} the deep comparison of
+     * two {@code int} arrays.
      *
      * <ol>
      *  <li>Check if arrays are the same using {@code ==}</li>
@@ -756,8 +756,8 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Appends to the {@code builder} the deep comparison of
-     * two {@code short} arrays.</p>
+     * Appends to the {@code builder} the deep comparison of
+     * two {@code short} arrays.
      *
      * <ol>
      *  <li>Check if arrays are the same using {@code ==}</li>
@@ -796,8 +796,8 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Appends to the {@code builder} the deep comparison of
-     * two {@code char} arrays.</p>
+     * Appends to the {@code builder} the deep comparison of
+     * two {@code char} arrays.
      *
      * <ol>
      *  <li>Check if arrays are the same using {@code ==}</li>
@@ -836,8 +836,8 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Appends to the {@code builder} the deep comparison of
-     * two {@code byte} arrays.</p>
+     * Appends to the {@code builder} the deep comparison of
+     * two {@code byte} arrays.
      *
      * <ol>
      *  <li>Check if arrays are the same using {@code ==}</li>
@@ -876,8 +876,8 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Appends to the {@code builder} the deep comparison of
-     * two {@code double} arrays.</p>
+     * Appends to the {@code builder} the deep comparison of
+     * two {@code double} arrays.
      *
      * <ol>
      *  <li>Check if arrays are the same using {@code ==}</li>
@@ -916,8 +916,8 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Appends to the {@code builder} the deep comparison of
-     * two {@code float} arrays.</p>
+     * Appends to the {@code builder} the deep comparison of
+     * two {@code float} arrays.
      *
      * <ol>
      *  <li>Check if arrays are the same using {@code ==}</li>
@@ -956,8 +956,8 @@ public class CompareToBuilder implements Builder<Integer> {
     }
 
     /**
-     * <p>Appends to the {@code builder} the deep comparison of
-     * two {@code boolean} arrays.</p>
+     * Appends to the {@code builder} the deep comparison of
+     * two {@code boolean} arrays.
      *
      * <ol>
      *  <li>Check if arrays are the same using {@code ==}</li>

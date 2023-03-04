@@ -18,8 +18,10 @@ package org.apache.commons.lang3.text.translate;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.UncheckedIOException;
 import java.io.Writer;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * An API for translating text.
@@ -65,7 +67,7 @@ public abstract class CharSequenceTranslator {
             return writer.toString();
         } catch (final IOException ioe) {
             // this should never ever happen while writing to a StringWriter
-            throw new RuntimeException(ioe);
+            throw new UncheckedIOException(ioe);
         }
     }
 
@@ -74,30 +76,28 @@ public abstract class CharSequenceTranslator {
      * tightly coupled with the abstract method of this class.
      *
      * @param input CharSequence that is being translated
-     * @param out Writer to translate the text to
+     * @param writer Writer to translate the text to
      * @throws IOException if and only if the Writer produces an IOException
      */
-    public final void translate(final CharSequence input, final Writer out) throws IOException {
-        if (out == null) {
-            throw new IllegalArgumentException("The Writer must not be null");
-        }
+    public final void translate(final CharSequence input, final Writer writer) throws IOException {
+        Objects.requireNonNull(writer, "writer");
         if (input == null) {
             return;
         }
         int pos = 0;
         final int len = input.length();
         while (pos < len) {
-            final int consumed = translate(input, pos, out);
+            final int consumed = translate(input, pos, writer);
             if (consumed == 0) {
                 // inlined implementation of Character.toChars(Character.codePointAt(input, pos))
                 // avoids allocating temp char arrays and duplicate checks
                 final char c1 = input.charAt(pos);
-                out.write(c1);
+                writer.write(c1);
                 pos++;
                 if (Character.isHighSurrogate(c1) && pos < len) {
                     final char c2 = input.charAt(pos);
                     if (Character.isLowSurrogate(c2)) {
-                      out.write(c2);
+                      writer.write(c2);
                       pos++;
                     }
                 }
@@ -126,11 +126,11 @@ public abstract class CharSequenceTranslator {
     }
 
     /**
-     * <p>Returns an upper case hexadecimal {@code String} for the given
-     * character.</p>
+     * Returns an upper case hexadecimal {@link String} for the given
+     * character.
      *
      * @param codePoint The code point to convert.
-     * @return An upper case hexadecimal {@code String}
+     * @return An upper case hexadecimal {@link String}
      */
     public static String hex(final int codePoint) {
         return Integer.toHexString(codePoint).toUpperCase(Locale.ENGLISH);

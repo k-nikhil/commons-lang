@@ -23,22 +23,23 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
 
 /**
- * <p>An EventListenerSupport object can be used to manage a list of event
+ * An EventListenerSupport object can be used to manage a list of event
  * listeners of a particular type. The class provides
  * {@link #addListener(Object)} and {@link #removeListener(Object)} methods
  * for registering listeners, as well as a {@link #fire()} method for firing
  * events to the listeners.
- * </p>
  *
  * <p>
  * To use this class, suppose you want to support ActionEvents.  You would do:
@@ -80,7 +81,7 @@ public class EventListenerSupport<L> implements Serializable {
 
     /**
      * The proxy representing the collection of listeners. Calls to this proxy
-     * object will sent to all registered listeners.
+     * object will be sent to all registered listeners.
      */
     private transient L proxy;
 
@@ -140,8 +141,8 @@ public class EventListenerSupport<L> implements Serializable {
      */
     public EventListenerSupport(final Class<L> listenerInterface, final ClassLoader classLoader) {
         this();
-        Validate.notNull(listenerInterface, "listenerInterface");
-        Validate.notNull(classLoader, "classLoader");
+        Objects.requireNonNull(listenerInterface, "listenerInterface");
+        Objects.requireNonNull(classLoader, "classLoader");
         Validate.isTrue(listenerInterface.isInterface(), "Class %s is not an interface",
                 listenerInterface.getName());
         initializeTransientFields(listenerInterface, classLoader);
@@ -194,7 +195,7 @@ public class EventListenerSupport<L> implements Serializable {
      * @since 3.5
      */
     public void addListener(final L listener, final boolean allowDuplicate) {
-        Validate.notNull(listener, "listener");
+        Objects.requireNonNull(listener, "listener");
         if (allowDuplicate || !listeners.contains(listener)) {
             listeners.add(listener);
         }
@@ -218,7 +219,7 @@ public class EventListenerSupport<L> implements Serializable {
      *         {@code null}.
      */
     public void removeListener(final L listener) {
-        Validate.notNull(listener, "listener");
+        Objects.requireNonNull(listener, "listener");
         listeners.remove(listener);
     }
 
@@ -311,19 +312,19 @@ public class EventListenerSupport<L> implements Serializable {
     protected class ProxyInvocationHandler implements InvocationHandler {
 
         /**
-         * Propagates the method call to all registered listeners in place of
-         * the proxy listener object.
+         * Propagates the method call to all registered listeners in place of the proxy listener object.
          *
-         * @param unusedProxy the proxy object representing a listener on which the
-         *        invocation was called; not used
-         * @param method the listener method that will be called on all of the
-         *        listeners.
+         * @param unusedProxy the proxy object representing a listener on which the invocation was called; not used
+         * @param method the listener method that will be called on all of the listeners.
          * @param args event arguments to propagate to the listeners.
          * @return the result of the method call
-         * @throws Throwable if an error occurs
+         * @throws InvocationTargetException if an error occurs
+         * @throws IllegalArgumentException if an error occurs
+         * @throws IllegalAccessException if an error occurs
          */
         @Override
-        public Object invoke(final Object unusedProxy, final Method method, final Object[] args) throws Throwable {
+        public Object invoke(final Object unusedProxy, final Method method, final Object[] args)
+                throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
             for (final L listener : listeners) {
                 method.invoke(listener, args);
             }

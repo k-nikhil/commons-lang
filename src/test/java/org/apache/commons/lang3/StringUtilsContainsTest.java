@@ -32,7 +32,7 @@ import org.junitpioneer.jupiter.DefaultLocale;
 /**
  * Unit tests {@link org.apache.commons.lang3.StringUtils} - Contains methods
  */
-public class StringUtilsContainsTest  {
+public class StringUtilsContainsTest extends AbstractLangTest {
     @Test
     public void testContains_Char() {
         assertFalse(StringUtils.contains(null, ' '));
@@ -61,7 +61,7 @@ public class StringUtilsContainsTest  {
     }
 
     /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
+     * See https://www.oracle.com/technical-resources/articles/javase/supplementary.html
      */
     @Test
     public void testContains_StringWithBadSupplementaryChars() {
@@ -76,7 +76,7 @@ public class StringUtilsContainsTest  {
     }
 
     /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
+     * See https://www.oracle.com/technical-resources/articles/javase/supplementary.html
      */
     @Test
     public void testContains_StringWithSupplementaryChars() {
@@ -105,7 +105,7 @@ public class StringUtilsContainsTest  {
     }
 
     /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
+     * See https://www.oracle.com/technical-resources/articles/javase/supplementary.html
      */
     @Test
     public void testContainsAny_StringCharArrayWithBadSupplementaryChars() {
@@ -120,7 +120,7 @@ public class StringUtilsContainsTest  {
     }
 
     /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
+     * See https://www.oracle.com/technical-resources/articles/javase/supplementary.html
      */
     @Test
     public void testContainsAny_StringCharArrayWithSupplementaryChars() {
@@ -200,7 +200,7 @@ public class StringUtilsContainsTest  {
     }
 
     /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
+     * See https://www.oracle.com/technical-resources/articles/javase/supplementary.html
      */
     @Test
     public void testContainsAny_StringWithBadSupplementaryChars() {
@@ -214,7 +214,7 @@ public class StringUtilsContainsTest  {
     }
 
     /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
+     * See https://www.oracle.com/technical-resources/articles/javase/supplementary.html
      */
     @Test
     public void testContainsAny_StringWithSupplementaryChars() {
@@ -315,7 +315,7 @@ public class StringUtilsContainsTest  {
     }
 
     /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
+     * See https://www.oracle.com/technical-resources/articles/javase/supplementary.html
      */
     @Test
     public void testContainsNone_CharArrayWithBadSupplementaryChars() {
@@ -330,7 +330,7 @@ public class StringUtilsContainsTest  {
     }
 
     /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
+     * See https://www.oracle.com/technical-resources/articles/javase/supplementary.html
      */
     @Test
     public void testContainsNone_CharArrayWithSupplementaryChars() {
@@ -372,7 +372,7 @@ public class StringUtilsContainsTest  {
     }
 
     /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
+     * See https://www.oracle.com/technical-resources/articles/javase/supplementary.html
      */
     @Test
     public void testContainsNone_StringWithBadSupplementaryChars() {
@@ -387,7 +387,7 @@ public class StringUtilsContainsTest  {
     }
 
     /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
+     * See https://www.oracle.com/technical-resources/articles/javase/supplementary.html
      */
     @Test
     public void testContainsNone_StringWithSupplementaryChars() {

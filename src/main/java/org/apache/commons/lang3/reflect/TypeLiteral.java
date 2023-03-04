@@ -22,10 +22,10 @@ import java.lang.reflect.TypeVariable;
 import org.apache.commons.lang3.Validate;
 
 /**
- * <p>Type literal comparable to {@code javax.enterprise.util.TypeLiteral},
+ * Type literal comparable to {@code javax.enterprise.util.TypeLiteral},
  * made generally available outside the JEE context. Allows the passing around of
  * a "token" that represents a type in a typesafe manner, as opposed to
- * passing the (non-parameterized) {@link Type} object itself. Consider:</p>
+ * passing the (non-parameterized) {@link Type} object itself. Consider:
  * <p>
  * You might see such a typesafe API as:
  * <pre>
@@ -59,7 +59,7 @@ import org.apache.commons.lang3.Validate;
  * <p>
  * This has the effect of "jumping up" a level to tie a {@code java.lang.reflect.Type}
  * to a type variable while simultaneously making it short work to obtain a
- * {@code Type} instance for any given type, inline.
+ * {@link Type} instance for any given type, inline.
  * </p>
  * <p>Additionally {@link TypeLiteral} implements the {@link Typed} interface which
  * is a generalization of this concept, and which may be implemented in custom classes.

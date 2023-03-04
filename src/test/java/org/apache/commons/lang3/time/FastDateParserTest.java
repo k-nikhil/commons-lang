@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.AbstractLangTest;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.SystemUtils;
@@ -51,7 +52,7 @@ import org.junit.jupiter.params.provider.MethodSource;
  *
  * @since 3.2
  */
-public class FastDateParserTest {
+public class FastDateParserTest extends AbstractLangTest {
 
     private enum Expected1806 {
         India(INDIA, "+05", "+0530", "+05:30", true), Greenwich(TimeZones.GMT, "Z", "Z", "Z", false),
@@ -150,7 +151,7 @@ public class FastDateParserTest {
         final Calendar cal = Calendar.getInstance(zone, locale);
         cal.clear();
 
-        // http://docs.oracle.com/javase/6/docs/technotes/guides/intl/calendar.doc.html
+        // https://docs.oracle.com/javase/8/docs/technotes/guides/intl/calendar.doc.html
         if (locale.equals(FastDateParser.JAPANESE_IMPERIAL)) {
             if (year < 1868) {
                 cal.set(Calendar.ERA, 0);
@@ -662,10 +663,10 @@ public class FastDateParserTest {
         testSdfAndFdp(dpProvider, "''''yyyyMMdd'A''B'HHmmssSSS''", "''20030210A'B153320989'", false); // OK
         testSdfAndFdp(dpProvider, "'$\\Ed'", "$\\Ed", false); // OK
 
-        // quoted charaters are case sensitive
+        // quoted characters are case-sensitive
         testSdfAndFdp(dpProvider, "'QED'", "QED", false);
         testSdfAndFdp(dpProvider, "'QED'", "qed", true);
-        // case sensitive after insensitive Month field
+        // case-sensitive after insensitive Month field
         testSdfAndFdp(dpProvider, "yyyy-MM-dd 'QED'", "2003-02-10 QED", false);
         testSdfAndFdp(dpProvider, "yyyy-MM-dd 'QED'", "2003-02-10 qed", true);
     }
@@ -712,7 +713,7 @@ public class FastDateParserTest {
             sdf.set2DigitYearStart(csDate);
         }
         final String fmt = sdf.format(inDate);
-//        System.out.printf("[Java %s] Date: '%s' formated with '%s' -> '%s'%n", SystemUtils.JAVA_RUNTIME_VERSION, inDate,
+//        System.out.printf("[Java %s] Date: '%s' formatted with '%s' -> '%s'%n", SystemUtils.JAVA_RUNTIME_VERSION, inDate,
 //            formatStr, fmt);
         try {
             final Date out = dateParser.parse(fmt);

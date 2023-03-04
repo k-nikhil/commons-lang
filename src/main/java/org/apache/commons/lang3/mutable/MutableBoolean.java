@@ -25,6 +25,7 @@ import org.apache.commons.lang3.BooleanUtils;
  * A mutable {@code boolean} wrapper.
  * <p>
  * Note that as MutableBoolean does not extend Boolean, it is not treated by String.format as a Boolean parameter.
+ * </p>
  *
  * @see Boolean
  * @since 2.2
@@ -155,7 +156,7 @@ public class MutableBoolean implements Mutable<Boolean>, Serializable, Comparabl
 
     /**
      * Compares this object to the specified object. The result is {@code true} if and only if the argument is
-     * not {@code null} and is an {@code MutableBoolean} object that contains the same
+     * not {@code null} and is an {@link MutableBoolean} object that contains the same
      * {@code boolean} value as this object.
      *
      * @param obj  the object to compare with, null returns false

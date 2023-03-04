@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  */
-public class ClassPathUtilsTest {
+public class ClassPathUtilsTest extends AbstractLangTest {
 
     @Test
     public void testConstructor() {
@@ -39,6 +39,20 @@ public class ClassPathUtilsTest {
         assertTrue(Modifier.isPublic(cons[0].getModifiers()));
         assertTrue(Modifier.isPublic(ClassPathUtils.class.getModifiers()));
         assertFalse(Modifier.isFinal(ClassPathUtils.class.getModifiers()));
+    }
+
+    @Test
+    public void testPackageToPath() {
+        assertEquals("a", ClassPathUtils.packageToPath("a"));
+        assertEquals("a/b", ClassPathUtils.packageToPath("a.b"));
+        assertEquals("a/b/c", ClassPathUtils.packageToPath("a.b.c"));
+    }
+
+    @Test
+    public void testPathToPackage() {
+        assertEquals("a", ClassPathUtils.pathToPackage("a"));
+        assertEquals("a.b", ClassPathUtils.pathToPackage("a/b"));
+        assertEquals("a.b.c", ClassPathUtils.pathToPackage("a/b/c"));
     }
 
     @Test

@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test;
  * Unit tests for {@link StringEscapeUtils}.
  */
 @Deprecated
-public class StringEscapeUtilsTest {
+public class StringEscapeUtilsTest extends AbstractLangTest {
     private static final String FOO = "foo";
 
     @Test
@@ -55,8 +55,8 @@ public class StringEscapeUtilsTest {
     @Test
     public void testEscapeJava() throws IOException {
         assertNull(StringEscapeUtils.escapeJava(null));
-        assertThrows(IllegalArgumentException.class, () -> StringEscapeUtils.ESCAPE_JAVA.translate(null, null));
-        assertThrows(IllegalArgumentException.class, () -> StringEscapeUtils.ESCAPE_JAVA.translate("", null));
+        assertThrows(NullPointerException.class, () -> StringEscapeUtils.ESCAPE_JAVA.translate(null, null));
+        assertThrows(NullPointerException.class, () -> StringEscapeUtils.ESCAPE_JAVA.translate("", null));
 
         assertEscapeJava("empty string", "", "");
         assertEscapeJava(FOO, FOO);
@@ -112,8 +112,8 @@ public class StringEscapeUtilsTest {
     @Test
     public void testUnescapeJava() throws IOException {
         assertNull(StringEscapeUtils.unescapeJava(null));
-        assertThrows(IllegalArgumentException.class, () -> StringEscapeUtils.UNESCAPE_JAVA.translate(null, null));
-        assertThrows(IllegalArgumentException.class, () -> StringEscapeUtils.UNESCAPE_JAVA.translate("", null));
+        assertThrows(NullPointerException.class, () -> StringEscapeUtils.UNESCAPE_JAVA.translate(null, null));
+        assertThrows(NullPointerException.class, () -> StringEscapeUtils.UNESCAPE_JAVA.translate("", null));
         assertThrows(RuntimeException.class, () -> StringEscapeUtils.unescapeJava("\\u02-3"));
 
         assertUnescapeJava("", "");
@@ -152,8 +152,8 @@ public class StringEscapeUtilsTest {
     @Test
     public void testEscapeEcmaScript() {
         assertNull(StringEscapeUtils.escapeEcmaScript(null));
-        assertThrows(IllegalArgumentException.class, () -> StringEscapeUtils.ESCAPE_ECMASCRIPT.translate(null, null));
-        assertThrows(IllegalArgumentException.class, () -> StringEscapeUtils.ESCAPE_ECMASCRIPT.translate("", null));
+        assertThrows(NullPointerException.class, () -> StringEscapeUtils.ESCAPE_ECMASCRIPT.translate(null, null));
+        assertThrows(NullPointerException.class, () -> StringEscapeUtils.ESCAPE_ECMASCRIPT.translate("", null));
 
         assertEquals("He didn\\'t say, \\\"stop!\\\"", StringEscapeUtils.escapeEcmaScript("He didn't say, \"stop!\""));
         assertEquals("document.getElementById(\\\"test\\\").value = \\'<script>alert(\\'aaa\\');<\\/script>\\';",
@@ -163,8 +163,8 @@ public class StringEscapeUtilsTest {
     @Test
     public void testUnescapeEcmaScript() {
         assertNull(StringEscapeUtils.escapeEcmaScript(null));
-        assertThrows(IllegalArgumentException.class, () -> StringEscapeUtils.UNESCAPE_ECMASCRIPT.translate(null, null));
-        assertThrows(IllegalArgumentException.class, () -> StringEscapeUtils.UNESCAPE_ECMASCRIPT.translate("", null));
+        assertThrows(NullPointerException.class, () -> StringEscapeUtils.UNESCAPE_ECMASCRIPT.translate(null, null));
+        assertThrows(NullPointerException.class, () -> StringEscapeUtils.UNESCAPE_ECMASCRIPT.translate("", null));
 
         assertEquals("He didn't say, \"stop!\"", StringEscapeUtils.unescapeEcmaScript("He didn\\'t say, \\\"stop!\\\""));
         assertEquals("document.getElementById(\"test\").value = '<script>alert('aaa');</script>';",
@@ -318,7 +318,7 @@ public class StringEscapeUtilsTest {
     /**
      * Tests Supplementary characters.
      * <p>
-     * From http://www.w3.org/International/questions/qa-escapes
+     * From https://www.w3.org/International/questions/qa-escapes
      * </p>
      * <blockquote>
      * Supplementary characters are those Unicode characters that have code points higher than the characters in
@@ -327,7 +327,7 @@ public class StringEscapeUtilsTest {
      * - you must use the single, code point value for that character. For example, use &amp;&#35;x233B4&#59; rather than
      * &amp;&#35;xD84C&#59;&amp;&#35;xDFB4&#59;.
      * </blockquote>
-     * @see <a href="http://www.w3.org/International/questions/qa-escapes">Using character escapes in markup and CSS</a>
+     * @see <a href="https://www.w3.org/International/questions/qa-escapes">Using character escapes in markup and CSS</a>
      * @see <a href="https://issues.apache.org/jira/browse/LANG-728">LANG-728</a>
      */
     @Test
@@ -344,7 +344,7 @@ public class StringEscapeUtilsTest {
 
     @Test
     public void testEscapeXmlAllCharacters() {
-        // http://www.w3.org/TR/xml/#charsets says:
+        // https://www.w3.org/TR/xml/#charsets says:
         // Char ::= #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF] /* any Unicode character,
         // excluding the surrogate blocks, FFFE, and FFFF. */
         final CharSequenceTranslator escapeXml = StringEscapeUtils.ESCAPE_XML
@@ -374,8 +374,8 @@ public class StringEscapeUtilsTest {
                 "Supplementary characters mixed with basic characters should be decoded correctly");
     }
 
-    // Tests issue #38569
-    // https://issues.apache.org/bugzilla/show_bug.cgi?id=38569
+    // Tests issue LANG-150
+    // https://issues.apache.org/jira/browse/LANG-150
     @Test
     public void testStandaloneAmphersand() {
         assertEquals("<P&O>", StringEscapeUtils.unescapeHtml4("&lt;P&O&gt;"));
@@ -546,8 +546,8 @@ public class StringEscapeUtilsTest {
     @Test
     public void testEscapeJson() {
         assertNull(StringEscapeUtils.escapeJson(null));
-        assertThrows(IllegalArgumentException.class, () -> StringEscapeUtils.ESCAPE_JSON.translate(null, null));
-        assertThrows(IllegalArgumentException.class, () -> StringEscapeUtils.ESCAPE_JSON.translate("", null));
+        assertThrows(NullPointerException.class, () -> StringEscapeUtils.ESCAPE_JSON.translate(null, null));
+        assertThrows(NullPointerException.class, () -> StringEscapeUtils.ESCAPE_JSON.translate("", null));
 
         assertEquals("He didn't say, \\\"stop!\\\"", StringEscapeUtils.escapeJson("He didn't say, \"stop!\""));
 
@@ -560,8 +560,8 @@ public class StringEscapeUtilsTest {
     @Test
     public void testUnescapeJson() {
         assertNull(StringEscapeUtils.unescapeJson(null));
-        assertThrows(IllegalArgumentException.class, () -> StringEscapeUtils.UNESCAPE_JSON.translate(null, null));
-        assertThrows(IllegalArgumentException.class, () -> StringEscapeUtils.UNESCAPE_JSON.translate("", null));
+        assertThrows(NullPointerException.class, () -> StringEscapeUtils.UNESCAPE_JSON.translate(null, null));
+        assertThrows(NullPointerException.class, () -> StringEscapeUtils.UNESCAPE_JSON.translate("", null));
 
         assertEquals("He didn't say, \"stop!\"", StringEscapeUtils.unescapeJson("He didn't say, \\\"stop!\\\""));
 

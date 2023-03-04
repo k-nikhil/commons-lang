@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Insets;
@@ -42,6 +43,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.TreeSet;
 
+import org.apache.commons.lang3.AbstractLangTest;
 import org.apache.commons.lang3.reflect.testbed.Foo;
 import org.apache.commons.lang3.reflect.testbed.GenericParent;
 import org.apache.commons.lang3.reflect.testbed.GenericTypeHolder;
@@ -143,7 +145,7 @@ abstract class Test1<G> {
  */
 @SuppressWarnings({ "unchecked", "unused", "rawtypes" })
 //raw types, where used, are used purposely
-public class TypeUtilsTest<B> {
+public class TypeUtilsTest<B> extends AbstractLangTest {
 
     public interface And<K, V> extends This<Number, Number> {
     }
@@ -947,10 +949,36 @@ public class TypeUtilsTest<B> {
     }
 
     @Test
+    public void testParameterizeNullPointerException() {
+        assertThrows(NullPointerException.class, () -> TypeUtils.parameterize(null, Collections.emptyMap()));
+        final Map<TypeVariable<?>, Type> nullTypeVariableMap = null;
+        assertThrows(NullPointerException.class, () -> TypeUtils.parameterize(String.class, nullTypeVariableMap));
+    }
+
+    @Test
+    public void testParameterizeVarArgsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> TypeUtils.parameterize(null));
+    }
+
+    @Test
     public void testParameterizeWithOwner() throws Exception {
         final Type owner = TypeUtils.parameterize(TypeUtilsTest.class, String.class);
         final ParameterizedType dat2Type = TypeUtils.parameterizeWithOwner(owner, That.class, String.class, String.class);
         assertTrue(TypeUtils.equals(getClass().getField("dat2").getGenericType(), dat2Type));
+    }
+
+    @Test
+    public void testParameterizeWithOwner3ArgsNullPointerException() {
+        final Type owner = TypeUtils.parameterize(TypeUtilsTest.class, String.class);
+        assertThrows(NullPointerException.class, () -> TypeUtils.parameterizeWithOwner(owner, null, String.class));
+        final Map<TypeVariable<?>, Type> nullTypeVariableMap = null;
+        assertThrows(NullPointerException.class, () -> TypeUtils.parameterizeWithOwner(owner, That.class, nullTypeVariableMap));
+    }
+
+    @Test
+    public void testParameterizeWithOwnerVarArgsNullPointerException() {
+        final Type owner = TypeUtils.parameterize(TypeUtilsTest.class, String.class);
+        assertThrows(NullPointerException.class, () -> TypeUtils.parameterizeWithOwner(owner, null));
     }
 
     @Test

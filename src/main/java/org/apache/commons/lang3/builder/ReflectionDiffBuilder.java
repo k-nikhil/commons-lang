@@ -25,9 +25,8 @@ import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 /**
- * <p>
  * Assists in implementing {@link Diffable#diff(Object)} methods.
- * </p>
+ *
  * <p>
  * All non-static, non-transient fields (including inherited fields)
  * of the objects to diff are discovered using reflection and compared
@@ -54,8 +53,8 @@ import org.apache.commons.lang3.reflect.FieldUtils;
  * </pre>
  *
  * <p>
- * The {@code ToStringStyle} passed to the constructor is embedded in the
- * returned {@code DiffResult} and influences the style of the
+ * The {@link ToStringStyle} passed to the constructor is embedded in the
+ * returned {@link DiffResult} and influences the style of the
  * {@code DiffResult.toString()} method. This style choice can be overridden by
  * calling {@link DiffResult#toString(ToStringStyle)}.
  * </p>
@@ -74,9 +73,7 @@ public class ReflectionDiffBuilder<T> implements Builder<DiffResult<T>> {
     private final DiffBuilder<T> diffBuilder;
 
     /**
-     * <p>
      * Constructs a builder for the specified objects with the specified style.
-     * </p>
      *
      * <p>
      * If {@code lhs == rhs} or {@code lhs.equals(rhs)} then the builder will

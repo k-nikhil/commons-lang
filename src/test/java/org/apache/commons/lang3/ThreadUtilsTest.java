@@ -33,13 +33,16 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Predicate;
 
+import org.apache.commons.lang3.ThreadUtils.ThreadGroupPredicate;
+import org.apache.commons.lang3.ThreadUtils.ThreadPredicate;
 import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests {@link org.apache.commons.lang3.ThreadUtils}.
  */
-public class ThreadUtilsTest {
+public class ThreadUtilsTest extends AbstractLangTest {
 
     private static class TestThread extends Thread {
         private final CountDownLatch latch = new CountDownLatch(1);
@@ -56,7 +59,7 @@ public class ThreadUtilsTest {
         public void run() {
             latch.countDown();
             try {
-                synchronized(this) {
+                synchronized (this) {
                     this.wait();
                 }
             } catch (final InterruptedException e) {
@@ -95,7 +98,8 @@ public class ThreadUtilsTest {
         final ThreadGroup threadGroup6 = new ThreadGroup(threadGroup4, "thread_group_6__");
         final ThreadGroup threadGroup7 = new ThreadGroup(threadGroup4, "thread_group_7__");
         final ThreadGroup threadGroup7Doubled = new ThreadGroup(threadGroup4, "thread_group_7__");
-        final List<ThreadGroup> threadGroups = Arrays.asList(threadGroup1, threadGroup2, threadGroup3, threadGroup4, threadGroup5, threadGroup6, threadGroup7, threadGroup7Doubled);
+        final List<ThreadGroup> threadGroups = Arrays.asList(threadGroup1, threadGroup2, threadGroup3, threadGroup4, threadGroup5, threadGroup6, threadGroup7,
+            threadGroup7Doubled);
 
         final Thread t1 = new TestThread("thread1_X__");
         final Thread t2 = new TestThread(threadGroup1, "thread2_X__");
@@ -250,7 +254,7 @@ public class ThreadUtilsTest {
         final ThreadGroup threadGroup = new ThreadGroup("thread_group_DDZZ99__");
         final Thread t1 = new TestThread(threadGroup, "thread1_XXOOPP__");
         final Thread t2 = new TestThread(threadGroup, "thread2_XXOOPP__");
-        final long nonExistingId = t1.getId()+t2.getId();
+        final long nonExistingId = t1.getId() + t2.getId();
 
         try {
             t1.start();
@@ -270,20 +274,20 @@ public class ThreadUtilsTest {
 
     @Test
     public void testThreadGroupsByIdFail() {
-        assertThrows(NullPointerException.class,
-                () -> ThreadUtils.findThreadById(Thread.currentThread().getId(), (String) null));
-    }
-
-
-    @Test
-    public void testThreadgroupsNullParent() {
-        assertThrows(NullPointerException.class,
-                () -> ThreadUtils.findThreadGroups(null, true, ThreadUtils.ALWAYS_TRUE_PREDICATE));
+        assertThrows(NullPointerException.class, () -> ThreadUtils.findThreadById(Thread.currentThread().getId(), (String) null));
     }
 
     @Test
-    public void testThreadgroupsNullPredicate() {
-        assertThrows(NullPointerException.class, () -> ThreadUtils.findThreadGroups(null));
+    public void testThreadGroupsNullParent() {
+        assertThrows(NullPointerException.class, () -> ThreadUtils.findThreadGroups(null, true, ThreadUtils.ALWAYS_TRUE_PREDICATE));
+        assertThrows(NullPointerException.class, () -> ThreadUtils.findThreadGroups(null, false, ThreadUtils.ALWAYS_TRUE_PREDICATE));
+    }
+
+    @Test
+    public void testThreadGroupsNullPredicate() {
+        assertThrows(NullPointerException.class, () -> ThreadUtils.findThreadGroups((ThreadGroupPredicate) null));
+        assertThrows(NullPointerException.class, () -> ThreadUtils.findThreadGroups((Predicate<ThreadGroup>) null));
+        assertThrows(NullPointerException.class, () -> ThreadUtils.findThreadGroups((Predicate) null));
     }
 
     @Test
@@ -346,7 +350,6 @@ public class ThreadUtilsTest {
         }
     }
 
-
     @Test
     public void testThreadsByIdWrongGroup() throws InterruptedException {
         final Thread t1 = new TestThread("thread1_XXOOLL__");
@@ -364,7 +367,9 @@ public class ThreadUtilsTest {
 
     @Test
     public void testThreadsNullPredicate() {
-        assertThrows(NullPointerException.class, () -> ThreadUtils.findThreads(null));
+        assertThrows(NullPointerException.class, () -> ThreadUtils.findThreads((ThreadPredicate) null));
+        assertThrows(NullPointerException.class, () -> ThreadUtils.findThreads((Predicate<Thread>) null));
+        assertThrows(NullPointerException.class, () -> ThreadUtils.findThreads((Predicate) null));
     }
 
     @Test

@@ -18,14 +18,15 @@ package org.apache.commons.lang3.builder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.commons.lang3.AbstractLangTest;
 import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@link org.apache.commons.lang3.builder.HashCodeBuilder} and
- * {@link org.apache.commons.lang3.builder.EqualsBuilderTest} to insure that equal
+ * {@link org.apache.commons.lang3.builder.EqualsBuilderTest} to ensure that equal
  * objects must have equal hash codes.
  */
-public class HashCodeBuilderAndEqualsBuilderTest {
+public class HashCodeBuilderAndEqualsBuilderTest extends AbstractLangTest {
 
 
     private void testInteger(final boolean testTransients) {

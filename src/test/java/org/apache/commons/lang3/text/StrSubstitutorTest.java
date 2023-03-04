@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.lang3.AbstractLangTest;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +38,7 @@ import org.junit.jupiter.api.Test;
  * Test class for StrSubstitutor.
  */
 @Deprecated
-public class StrSubstitutorTest {
+public class StrSubstitutorTest extends AbstractLangTest {
 
     private Map<String, String> values;
 
@@ -469,13 +470,13 @@ public class StrSubstitutorTest {
 
         sub.setVariablePrefix("<<");
         assertTrue(sub.getVariablePrefixMatcher() instanceof StrMatcher.StringMatcher);
-        assertThrows(IllegalArgumentException.class, () -> sub.setVariablePrefix(null));
+        assertThrows(NullPointerException.class, () -> sub.setVariablePrefix(null));
         assertTrue(sub.getVariablePrefixMatcher() instanceof StrMatcher.StringMatcher);
 
         final StrMatcher matcher = StrMatcher.commaMatcher();
         sub.setVariablePrefixMatcher(matcher);
         assertSame(matcher, sub.getVariablePrefixMatcher());
-        assertThrows(IllegalArgumentException.class, () -> sub.setVariablePrefixMatcher(null));
+        assertThrows(NullPointerException.class, () -> sub.setVariablePrefixMatcher(null));
         assertSame(matcher, sub.getVariablePrefixMatcher());
     }
 
@@ -491,13 +492,13 @@ public class StrSubstitutorTest {
 
         sub.setVariableSuffix("<<");
         assertTrue(sub.getVariableSuffixMatcher() instanceof StrMatcher.StringMatcher);
-        assertThrows(IllegalArgumentException.class, () -> sub.setVariableSuffix(null));
+        assertThrows(NullPointerException.class, () -> sub.setVariableSuffix(null));
         assertTrue(sub.getVariableSuffixMatcher() instanceof StrMatcher.StringMatcher);
 
         final StrMatcher matcher = StrMatcher.commaMatcher();
         sub.setVariableSuffixMatcher(matcher);
         assertSame(matcher, sub.getVariableSuffixMatcher());
-        assertThrows(IllegalArgumentException.class, () -> sub.setVariableSuffixMatcher(null));
+        assertThrows(NullPointerException.class, () -> sub.setVariableSuffixMatcher(null));
         assertSame(matcher, sub.getVariableSuffixMatcher());
     }
 

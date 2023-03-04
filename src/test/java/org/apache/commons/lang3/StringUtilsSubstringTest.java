@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Unit tests {@link org.apache.commons.lang3.StringUtils} - Substring methods
  */
-public class StringUtilsSubstringTest  {
+public class StringUtilsSubstringTest extends AbstractLangTest {
     private static final String FOO = "foo";
     private static final String BAR = "bar";
     private static final String BAZ = "baz";
@@ -286,10 +286,11 @@ public class StringUtilsSubstringTest  {
         assertNull(StringUtils.substringBetween("foo", "[", "]"));
         assertEquals("", StringUtils.substringBetween("    ", " ", "  "));
         assertEquals("bar", StringUtils.substringBetween("<foo>bar</foo>", "<foo>", "</foo>") );
+        assertEquals("abc", StringUtils.substringBetween("yabczyabcz", "y", "z"));
     }
 
    /**
-     * Tests the substringsBetween method that returns an String Array of substrings.
+     * Tests the substringsBetween method that returns a String Array of substrings.
      */
     @Test
     public void testSubstringsBetween_StringStringString() {
